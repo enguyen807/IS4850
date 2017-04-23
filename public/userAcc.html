@@ -1,0 +1,386 @@
+l
+<html lang="en" ng-app="myApp">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.css" type="text/css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css">
+	<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" type="text/css">
+	<link rel="stylesheet" href="./src/less/about.css">
+	<link rel="stylesheet" href="./src/less/animate.css">
+	<link rel="stylesheet" href="./src/less/w3.css">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
+	<!--
+http://stackoverflow.com/questions/36172986/making-web-form-for-updating-data-in-firebase
+http://stackoverflow.com/questions/38704622/firebase-how-to-use-child-changed-with-tables
+https://vitalets.github.io/x-editable/demo-bs3.html***
+http://bootsnipp.com/snippets/3X6zm
+http://bootsnipp.com/snippets/56ExR
+http://jsfiddle.net/SPddm/300/
+http://stackoverflow.com/questions/9649877/how-to-disable-enable-input-field-on-click-with-jquery
+http://stackoverflow.com/questions/18350923/jquery-enabling-disabling-datepicker
+https://github.com/smalot/bootstrap-datetimepicker/issues/33
+https://www.firebase.com/docs/web/guide/retrieving-data.html#section-queries
+https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
+-->
+
+
+
+	<style>
+		.table td,
+		th {
+			text-align: center;
+		}
+		
+		div.tabstyle {
+			border-style: solid;
+			border-width: 1px;
+		}
+	</style>
+
+
+</head>
+
+<body id="accPage" data-spy="scroll" data-target=".navbar" data-offset="60" ng-controller="myAppCtrl as ctrl">
+
+	<!-- Navigation Bar 	 -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> 
+                </button>
+				<a class="navbar-brand" href="index.html">BLUE OCEAN</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a class="dropdown-toggle btn-action" id="btnWelcomeUser" data-toggle="dropdown" href="#">Welcome <span id="userNavName"></span> <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="" id="editProfile">EDIT PROFILE</a></li>
+							<li><a href="#signOut" id="ubtnSignOut">SIGN OUT</a></li>
+						</ul>
+					</li>
+						<li class="btn3">
+							<button type="button" class="btn btn-default btn-lg" id="nav-btnResv">Reservation</button>
+						</li>
+					<li>
+
+					</li>
+					<li>
+
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="modal fade" id="resv-modal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" style="padding:35px 50px;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
+					</div>
+
+					<div class="modal-body" style="padding:40px 50px;">
+						<div class="hide" id="userisLoggedIn">
+							<p>Would you like some loyalty points?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Create an account</a></p>
+							<p>Already have an account?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Sign In</a></p>
+						</div>
+
+						<form role="form" class="">
+							<div class="input-group">
+								<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
+								<input type="text" class="form-control" id="resv-modal-firstname" placeholder="First Name*" required>
+								<input type="text" class="form-control" id="resv-modal-lastname" placeholder="Last Name*" required>
+							</div>
+
+							<div class="input-group">
+								<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
+								<input type="email" class="form-control" id="resv-modal-accemail" placeholder="Enter E-mail*" required>
+								<input type="text" class="form-control" id="resv-modal-phnnum" placeholder="Enter Phone Number*" required>
+							</div>
+
+							<div class="input-group">
+								<label for="spial"><span class="glyphicon glyphicon-pencil"></span> Special Request</label>
+								<textarea class="form-control" rows="5" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="timNdate"><span class="glyphicon glyphicon-calendar"></span> Reservation Date</label>
+
+								<div id="resv-mod-input" class="resv-modal-input">
+									<div class="form-group col-sm-4">
+										<input class="form-control" id="resv-modal-date" ng-model="ctrl.datepicker" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.date" format="LL" min-view="year" start-view="month" min-date="ctrl.minDateMoment" max-date="ctrl.maxDateMoment"
+											autoclose="true" locale="en">
+									</div>
+
+									<div class="form-group col-sm-4">
+										<input class="form-control" id="resv-modal-time" format="LT" min-date="ctrl.minDateMoment" moment-picker="ctrl.time" placeholder="Select a time" ng-model="ctrl.timepicker" ng-model-options="{ updateOn: 'blur' }">
+									</div>
+
+									<div class="form-group col-sm-4">
+										<select name="people attending" style="padding:5px" class="ptysize col-sm-4" id="resv-modal-ptysize">
+                  <option value="1person">1 person</option>
+                  <option value="2person">2 people</option>
+                  <option value="3person">3 people</option>
+                  <option value="4person">4 people</option>
+                  <option value="5person">5 people</option>
+                </select>
+									</div>
+								</div>
+							</div>
+
+
+
+							<!--<div class="checkbox">-->
+							<!--  <label><input type="checkbox" value="" checked>Yes, I want to receive email messages.</label>-->
+							<!--</div>-->
+							<input type="submit" class="btn btn-success btn-block" id="btnResv-modal" data-dismiss="modal" value="Create reservation">
+						</form>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	
+	
+	
+	
+	
+	
+	<div class="container-fluid w3-padding-64 w3-sand" id="reservation">
+
+		<div class="col-lg-12 col-md-12 ">
+
+			<div class="col-md-2 col-lg-2 w3-light-blue hidden-sm hidden-xs">
+				<div class="panel-heading w3-center">
+					<h3>
+						<strong>
+							<span id="UAuserName"></span>
+						</strong>
+					</h3>
+				</div>
+				<div class="left-panel">
+
+					<div class="w3-center">
+						<img src="./src/assets/images/sushiavatar.jpg" alt="Alternate Text" class="img-circle" width="120px" height="120px" />
+					</div>
+
+					<hr/>
+
+					<h3><strong>Contact Information</strong></h3>
+					<p id="UAaccemail"></p>
+					<p id="UAphnnum"></p>
+
+					<hr/>
+
+					<h3><strong>Birthday</strong></h3>
+					<p id="UAbday"></p>
+
+					<hr/>
+
+					<h3><strong>Points</strong></h3>
+					<p id="UAloyPoints"></p>
+				</div>
+			</div>
+			<!-- Reservation Table -->
+			<div class="col-lg-9 col-md-9">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+					<li><a data-toggle="tab" href="#menu1">Settings</a></li>
+				</ul>
+
+				<div class="tab-content">
+
+					<div class="tabstyle container-fluid table-responsive tab-pane fade in active" id="home">
+						<h2>Reservations</h2>
+						<table class="table table-hover responsive" id="userResvTable">
+							<thead>
+								<tr>
+									<th>UID</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Phone Number</th>
+									<th>Date</th>
+									<th>Number of Guests</th>
+									<th>Cancel</th>
+								</tr>
+							</thead>
+							<tbody id="tablebody-reservation">
+							</tbody>
+						</table>
+
+
+					</div>
+
+					<div id="menu1" class="tab-pane fade">
+						<h3>Settings</h3>
+						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+					</div>
+
+				</div>
+
+			</div>
+			<!-- End of Table -->
+
+		</div>
+	</div>
+
+	<footer class="text-center">
+		<a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+			<span class="glyphicon glyphicon-chevron-up"></span>
+		</a>
+
+		<br>
+		<br>
+	</footer>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+	<script src="./src/components/moment-with-locales.js"></script>
+	<script src="./src/components/angular-moment-picker.min.js"></script>
+	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.js"></script>
+	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="./src/components/something.js"></script>
+	<script src="./src/components/jq-masked-input.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpbOWvfPGFbRedBZf_5ZLPmGhJtItn9kY&callback=myMap"></script>
+	<script src="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.js"></script>
+	<script src="https://unpkg.com/querybase@0.6.0"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.8/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+
+	<script>
+		// Initialize Firebase  
+		var config = {
+			apiKey: "AIzaSyBpjiG-b8_7LtiGbcKgZbG5uCKrwU2U6H4",
+			authDomain: "blueoceanrestaurant-f8f59.firebaseapp.com",
+			databaseURL: "https://blueoceanrestaurant-f8f59.firebaseio.com",
+			storageBucket: "blueoceanrestaurant-f8f59.appspot.com",
+			messagingSenderId: "590954473444"
+		};
+		firebase.initializeApp(config);
+		var database = firebase.database();
+		var user = firebase.auth().currentUser;
+
+		firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+				document.getElementById("userNavName").innerHTML = user.email;
+				var UAref = firebase.database().ref("accounts/" + user.uid)
+				UAref.once("value")
+					.then(function(snapshot) {
+						var a = snapshot.val().firstname;
+						var b = snapshot.val().lastname;
+						var c = snapshot.val().email;
+						var d = snapshot.val().loyalty;
+						var e = snapshot.val().phonenumber;
+						document.getElementById('UAuserName').innerHTML = a + " " + b;
+						document.getElementById('UAaccemail').innerHTML = c;
+						document.getElementById('UAphnnum').innerHTML = e;
+						document.getElementById('UAloyPoints').innerHTML = d;
+
+					})
+			}
+		});
+
+
+		var resvbTabRef = firebase.database().ref("Reservation/user")
+		resvbTabRef.on('child_added', function(snapshot) {
+			var user = firebase.auth().currentUser;
+				var specialKey = [];
+			 specialKey = snapshot.key;
+			var fullName = snapshot.val().Name;
+			var phnNum = snapshot.val().Phone_Number;
+			var ResvUID = snapshot.val().uid;
+			var ResvDate = snapshot.val().Reservation_Date;
+			var NumPeopl = snapshot.val().Number_of_Guests;
+			var ResvEmail = snapshot.val().Email;
+
+			var ResvInfo = fullName + phnNum + ResvDate + NumPeopl + ResvUID + ResvEmail
+
+			if (user.uid == ResvUID) {
+				var resvData = ('<tr><td ="specialKey">' + specialKey + '</td><td>' + fullName + '</td><td>' + user.email + '</td><td>' + phnNum + '</td><td>' + ResvDate + '</td><td>' + NumPeopl + '</td><td>' + '<button type="button" class="btn btn-default btn-sm" data-key=' + ResvInfo.key + ' id="cancelResv"><span class="glyphicon glyphicon-remove"></span> Cancel</button>' + '</td></tr>')
+				$("#userResvTable").append(resvData);
+			
+			} else {
+				console.log("error");
+			}
+			
+			$('#userResvTable').on('click', 'button[type="button"]', function(snapshot) {
+			$(this).closest('tr').remove();
+			alert(specialKey);
+			var resvbTabRef = firebase.database().ref("Reservation/user/")
+			resvbTabRef.once("value")
+				.then(function(snapshot) {
+					snapshot.forEach(function(childSnapshot) {
+						var key = childSnapshot.key;
+						var childData = childSnapshot.val();
+						var ref = firebase.database().ref("Reservation/user/").child(key)
+						return ref.remove().then(function() {
+							console.log('OK, gone');
+							
+						}).catch(function(e) {
+							console.log('OOPS, problem:' + e.message);
+
+						})
+
+						childSnapshot.ref.remove();
+						// 								console.log(resTab)
+					})
+				})
+
+
+		})
+
+
+		})
+
+
+
+	</script>
+
+
+
+	<script>
+		$('#edit').click(function() {
+			$('#exDate').prop("disabled", false);
+		});
+
+		$('#edit').click(function() {
+			$('#exTime').prop("disabled", false);
+		});
+				$(document).ready(function() {
+			$("#nav-btnResv").click(function() {
+				$("#resv-modal").modal();
+			});
+
+		});
+		
+	</script>
+
+
+
+	<script src="newApp.js"></script>
+
+</body>
+
+</html>

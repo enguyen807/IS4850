@@ -1,0 +1,1156 @@
+<!DOCTYPE>
+<html lang="en" ng-app="myApp">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!--[if IE]>
+	<script type="text/javascript">
+	(function(){
+	var html5elmeents = "address|article|aside|audio|canvas|command|datalist|details|dialog|figure|figcaption|footer|header|hgroup|keygen|mark|meter|menu|nav|progress|ruby|section|time|video".split('|');
+	for(var i = 0; i < html5elmeents.length; i++){
+	document.createElement(html5elmeents[i]);
+	}
+	}
+	)();
+	</script>
+	<![endif]-->
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.css" type="text/css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="./src/less/about.css">
+	<link rel="stylesheet" href="./src/less/animate.css">
+	<link rel="stylesheet" href="./src/less/w3.css">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.css" />
+
+	<noscript>Your browser does not support JavaScript!</noscript>
+
+
+
+	<!-- 
+
+TO-DO LIST
+1. Smooth Scrolling animation *DONE
+2. Create Reservation modal *DONE
+3. Add site map to footer *DONE
+3. Make an Account Page *DONE
+4. Make an admin page
+4. Transition to Angular JS for faster load 
+  3a. Modals
+  3b. Segmented Sections
+5. Make separate sign in, sign up page 
+6. Make everything look nice
+7. Use firebase to save user information
+8. Make everything look nice?er?
+  Animate everything
+
+
+
+-->
+
+
+	<title>Blue Ocean Restaurant</title>
+	<style>
+		.paraimg1 {
+			background-image: url('./src/assets/images/bvbb.jpg');
+			min-height: 200px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+		}
+		
+		.paraimg2 {
+			background-image: url('./src/assets/images/gh.jpg');
+			min-height: 200px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+		}
+		
+		.paraimg3 {
+			background-image: url('./src/assets/images/sdgf.jpg');
+			min-height: 200px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+		}
+		
+		@media (max-width:800px) {
+			.img-thumbnail {
+				display: none;
+			}
+		}
+		
+		#clockdiv {
+			font-family: sans-serif;
+			color: #fff;
+			display: inline-block;
+			font-weight: 100;
+			text-align: center;
+			font-size: 15px;
+		}
+		
+		#clockdiv>div {
+			padding: 8px;
+			border-radius: 3px;
+			background: #666666;
+			display: inline-block;
+		}
+		
+		#clockdiv div>span {
+			padding: 8px;
+			border-radius: 3px;
+			background: #323232;
+			display: inline-block;
+		}
+		
+		.smalltext {
+			padding-top: 3px;
+			font-size: 15px;
+		}
+		
+		#resv-wrap {
+			text-align: center;
+		}
+		
+		#resv-wrap .input-group,
+		#resv-wrap .ptysize {
+			width: 100%;
+		}
+		
+		#resv-mod-input .form-control,
+		#resv-mod-input .ptysize {
+			min-width: 150px;
+			max-width: 160px;
+		}
+		
+		#resvbyphone .resvbyphone {
+			text-align: left;
+			padding: 15px;
+		}
+		
+		@media (max-width: 800px) {
+			#resvbyphone .resvbyphone {
+				text-align: center;
+			}
+		}
+		
+		.onpage-resvform-style .input-group {
+			padding: 8px;
+		}
+		
+		.footerstyle .li {
+			list-style-type: none;
+			text-align: center;
+		}
+		
+		.footerstyle .ul {
+			display: inline;
+		}
+		
+		.footer-text-style {
+			text-align: left;
+		}
+		
+		@media (max-width: 800px) {
+			.footer-text-style {
+				text-align: center;
+			}
+		}
+		
+		#nav-btnResv {
+			padding: 10px;
+			text-align: center;
+		}
+	</style>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("user_svZaYyhmMeCSclcHuLGtA");
+   })();
+</script>
+
+
+
+
+
+</head>
+
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60" onload="getSeconds()" ng-controller="myAppCtrl as ctrl">
+
+	<!-- Navigation Bar -->
+	<section class="site-navigation">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+
+					<a class="navbar-brand" href="index.html">
+						<img src="./src/assets/images/blueoceanlogo.png" class="img-responsive" width="100" height="50" alt="">
+					</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown"><a class="hide dropdown-toggle btn-action" id="btnWelcomeUser" data-toggle="dropdown" href="#">Welcome <span id="frontpage-user"></span> <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="userAcc.html" id="btnAccManage" class="">ACCOUNT MANAGEMENT</a></li>
+								<li><a href="#signOut" id="btnLogout" class="">SIGN OUT</a></li>
+							</ul>
+						</li>
+						<li><a href="#about">ABOUT</a></li>
+						<li><a href="#menu">MENU</a></li>
+						<li><a href="#contact">CONTACT</a></li>
+						<li class="accstyle"><a href="#signIn-modal" id="nav-btnLogin" class=" btn-action">SIGN IN</a></li>
+						<li class="accstyle"><a href="#signUp-modal" id="nav-btnSignUp" class=" btn-secondary">SIGN UP</a></li>
+
+						<li class="btn3">
+							<button type="button" class="btn btn-default btn-lg" id="nav-btnResv">Reservation</button>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</section>
+
+	<!--Site Modules    -->
+	<section class="site-modules">
+		<!--Login Modal -->
+		<div class="modal fade" id="signIn-modal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header" style="padding:35px 50px;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4><span class="glyphicon glyphicon-lock"></span> Sign In</h4>
+					</div>
+					<div class="modal-body" style="padding:40px 50px;">
+						<form role="form" id="loginForm">
+							<div class="form-group">
+								<label for="usrname"><span class="glyphicon glyphicon-user"></span> E-Mail</label>
+								<input type="text" class="form-control" id="login-form-email" placeholder="Enter email">
+							</div>
+							<div class="form-group">
+								<label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+								<input type="password" class="form-control" id="login-form-psw" placeholder="Enter password">
+
+							</div>
+							<input type="submit" class="btn btn-success btn-block" data-dismiss="modal" id="btnLogin-modal" value="Sign in">
+						</form>
+						<div id="firebaseui-auth-container"></div>
+					</div>
+					<div class="modal-footer">
+
+						<input type="submit" class="btn btn-danger pull-left" data-dismiss="modal" value="Cancel">
+
+						<p>Not a member? <a data-dismiss="modal" data-toggle="modal" data-target="#signUp" data-backdrop="static">Sign Up</a></p>
+						<p><a data-dismiss="modal" data-toggle="modal" data-target="#recover" data-backdrop="static" id="pswReset">Forgot Password?</a></p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Sign Up Modal -->
+		<div class="modal fade" id="signUp-modal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header" style="padding:35px 50px;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4><span class="glyphicon glyphicon-lock"></span>Create Account</h4>
+					</div>
+
+					<div class="modal-body" style="padding:40px 50px;">
+						<form role="form" class="js-form" id="signUpForm" data-toggle="validator">
+							<div class="input-group">
+								<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
+								<input type="text" class="form-control" id="signup-form-firstname" placeholder="First Name" data-validation-regexp="/^[A-z]+$/" required>
+								<input type="text" class="form-control" id="signup-form-lastname" placeholder="Last Name" required>
+							</div>
+							<div class="form-group">
+								<label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+								<input type="password" class="form-control" id="signup-form-psw" placeholder="Enter password" data-minlength="6" required>
+								<input type="password" class="form-control" id="signup-form-repsw" placeholder="Re-Enter password" required>
+							</div>
+							<div class="form-group">
+								<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
+								<input type="email" class="form-control" id="signup-form-accemail" placeholder="Enter E-mail*" required>
+								<input type="text" class="form-control" id="signup-form-phnnum" placeholder="Enter Phone Number*" required>
+							</div>
+
+
+							<div class="checkbox">
+								<label><input type="checkbox" value="" checked>I Agree to the Terms and Conditions</label>
+							</div>
+							<input type="Submit" class="btn btn-success btn-block" id="btnSignUp-modal" data-backdrop="static" value="Submit">
+						</form>
+						<a data-dismiss="modal" data-toggle="modal" data-target="#signIn">Already have an account?</a>
+					</div>
+
+					<div class="modal-footer"></div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Password Reset-->
+		<div class="modal fade" id="recover" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header" style="padding:35px 50px;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4><span class="glyphicon glyphicon-lock"></span>Password Reset</h4>
+					</div>
+
+					<div class="modal-body" style="padding:40px 50px;">
+						<form role="form" class="form-pswReset">
+							<label for="rcvrpwd"><span class="glyphicon glyphicon-user"></span>Enter your Blue Ocean Restaurant associated e-mail address</label>
+							<a data-dismiss="modal" data-toggle="modal" href="">Forgot your email?</a>
+							<input type="email" class="form-control" name="Password Reset" id="pswResetEmail" placeholder="Email address" required>
+							<input type="submit" class="btn btn-success btn-block" id="btnResetPsw" data-backdrop="static" value="Submit">
+
+						</form>
+						<a data-dismiss="modal" data-toggle="modal" href="#signIn">Back to login.</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Reservation Modal -->
+
+		<div class="modal fade" id="resv-modal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" style="padding:35px 50px;">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
+					</div>
+
+					<div class="modal-body" style="padding:40px 50px;">
+						<div class="hide" id="userisLoggedIn">
+							<p>Would you like some loyalty points?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Create an account</a></p>
+							<p>Already have an account?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Sign In</a></p>
+						</div>
+
+						<form role="form" class="">
+							<div class="input-group">
+								<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
+								<input type="text" class="form-control" id="resv-modal-firstname" placeholder="First Name*" required>
+								<input type="text" class="form-control" id="resv-modal-lastname" placeholder="Last Name*" required>
+							</div>
+
+							<div class="input-group">
+								<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
+								<input type="email" class="form-control" id="resv-modal-accemail" placeholder="Enter E-mail*" required>
+								<input type="text" class="form-control" id="resv-modal-phnnum" placeholder="Enter Phone Number*" required>
+							</div>
+
+							<div class="input-group">
+								<label for="spial"><span class="glyphicon glyphicon-pencil"></span> Special Request</label>
+								<textarea class="form-control" rows="5" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="timNdate"><span class="glyphicon glyphicon-calendar"></span> Reservation Date</label>
+
+								<div id="resv-mod-input" class="resv-modal-input">
+									<div class="form-group col-sm-4">
+										<input class="form-control" id="resv-modal-date" ng-model="ctrl.datepicker" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.date" format="LL" min-view="year" start-view="month" min-date="ctrl.minDateMoment" max-date="ctrl.maxDateMoment"
+											autoclose="true" locale="en">
+									</div>
+
+									<div class="form-group col-sm-4">
+										<input class="form-control" id="resv-modal-time" format="LT" min-date="ctrl.minDateMoment" moment-picker="ctrl.time" placeholder="Select a time" ng-model="ctrl.timepicker" ng-model-options="{ updateOn: 'blur' }">
+									</div>
+
+									<div class="form-group col-sm-4">
+										<select name="people attending" style="padding:5px" class="ptysize col-sm-4" id="resv-modal-ptysize">
+                  <option value="1person">1 person</option>
+                  <option value="2person">2 people</option>
+                  <option value="3person">3 people</option>
+                  <option value="4person">4 people</option>
+                  <option value="5person">5 people</option>
+                </select>
+									</div>
+								</div>
+							</div>
+
+
+
+							<!--<div class="checkbox">-->
+							<!--  <label><input type="checkbox" value="" checked>Yes, I want to receive email messages.</label>-->
+							<!--</div>-->
+							<input type="submit" class="btn btn-success btn-block" id="btnResv-modal" data-dismiss="modal" value="Create reservation">
+						</form>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	<!--Top Jumbotron   -->
+	<header>
+		<div class="header-content">
+			<div class="bg-overlay">
+				<div class="header-content-inner">
+					<h1 class="animated fadeInDown">Welcome to Blue Ocean Restaurant</h1>
+					<div style="width: 50%; height: 20px; border-bottom: 1px solid #FFD65E; display:inline-block; w3-center">
+						<img src="./src/assets/images/oie_transparent.png" style="width: 40px">
+					</div>
+					<h4 class="animated fadeInDown">Happy Hour will start in</h4>
+					<div id="clockdiv" class="animated fadeInDown">
+
+
+						<div>
+							<span id="cdHour"></span>
+							<div class="smalltext">Hours</div>
+						</div>
+
+						<div>
+							<span id="cdMin"></span>
+							<div class="smalltext">Minutes</div>
+						</div>
+
+						<div>
+							<span id="cdSec"></span>
+							<div class="smalltext">Seconds</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- About Section  -->
+	<section class="about-section">
+		<div class="container-fluid w3-padding-64" id="about">
+			<h3 class="w3-center" style="font-family: Montserrat;">ABOUT US</h3>
+			<p class="w3-center"><em>Affordable Authentic Japanese Food</em></p>
+			<p>Two roommates, MBA graduates, agreed at a coffee shop in the Delmar Loop "Why is it so hard for us as Asian students to find a good Japanese food in the Mid West, yet affordable?". They spent years in college cooking at their own apartment to impress
+				colleagues along with studying supply chain, they opened Blue Ocean Sushi in 2008, next door to the Delmar Loop hot spot, the 609 Lounge. Named after a business book, with a believe to provide exceptional Japanese dining experience to the Washington
+				University community in the Delmar Loop. Unlike others, Blue Ocean Sushi was originally serving Omakase style where customers just sat down and be fed by the chef. Then in 2009, it offered All You Can Eat Sushi where customers can enjoy selections
+				of sushi with controllable budget. It was a very good feedback! Later in 2011, with more focus on other comfort food like Ramen, Tsukemen, Soba, Udon, Gyudon, Chashudon, it became "Blue Ocean Restaurant".</p>
+
+			<div style="width: 60%; height: 20px; border-bottom: 1px solid #FFD65E; display: block; margin: auto">
+				<img src="./src/assets/images/oie_transparent.png" style="width: 40px; display: block; margin: auto">
+			</div>
+			<br />
+			<div class="row">
+
+				<div class="w3-col m6 w3-center w3-padding-large">
+					<img src="./src/assets/images/sushiboat.jpg" class="w3-round w3-image w3-opacity w3-hover-opacity-off" alt="Sushi Boat" width="500" height="333">
+				</div>
+
+				<!-- Hide this text on small devices -->
+				<div class="w3-col m5 w3-hide-small w3-padding-large w3-white w3-panel w3-card w3-leftbar">
+
+					<p>Named the best Ramen in Missouri by Foursquare.com, thanks to our locally made ramen noodle that is made from Missouri wheat. Blue Ocean is where you can find a variety of Japanese quick fix or traditional and creative sushi rolls. Our menu updates
+						seasonally and aims to bring original flavor to your table. </p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Menu Section   -->
+	<section class="menu-section">
+
+		<div class="paraimg1 w3-display-container w3-opacity-min" id="menu">
+			<div class="w3-display-middle">
+				<span class="w3-xxlarge w3-text-light-grey w3-wide ">MENU</span>
+			</div>
+		</div>
+
+
+		<!-- Menu Section -->
+		<div class="container-fluid w3-padding-64 ">
+			<div class="w3-container ">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="list-group">
+							<ul id="filter">
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'Regular');" id="myLink" class="list-group-item tablink">Regular</a></li>
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'Special');" class="list-group-item tablink">Special</a></li>
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'Appetizers');" class="list-group-item tablink">Appetizers</a></li>
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'Ramen');" class="list-group-item tablink">Ramen</a></li>
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'PokeSalad');" class="list-group-item tablink">Salad</a></li>
+								<li><a href="javascript:void(0)" onclick="openMenu(event, 'Nigiri');" class="list-group-item tablink">Nigiri</a></li>
+							</ul>
+						</div>
+
+
+
+
+
+					</div>
+
+
+					<div class="col-sm-9 " style="display:inline;list-style-type: none;">
+						<div class="panel-group">
+
+							<!--Regular Section -->
+							<div id="Regular" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Tuna Roll</b><span class="w3-right w3-tag w3-round">$6.00</span></h4>
+									</div>
+									<div class="panel-body">This product contains raw meat</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Avocado Roll</b><span class="w3-right w3-tag   w3-round">$5.00</span></h4>
+									</div>
+									<div class="panel-body">Vegetarian Choice</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Salmon Roll</b><span class="w3-right w3-tag   w3-round">$6.00</span></h4>
+									</div>
+									<div class="panel-body">This product contains raw meat</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Crunchy YellowTail Roll</b><span class="w3-right w3-tag   w3-round">$8.00</span></h4>
+									</div>
+									<div class="panel-body">This product is spicy and contains raw meat</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Hello Kitty Roll</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Shrimp, creamcheese, soy paper</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Spicy Fried Calamari Roll</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">This product is spicy</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Lone Star Roll</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Spicy craw fish salad, creamcheese, asparagus, fried onion, spicy mayo</div>
+								</div>
+
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Spicy Girl</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Crab salad, shrimp, masago, spicy mayo, scallions</div>
+								</div>
+							</div>
+							<!--Special Section -->
+							<div id="Special" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Godzilla</b><span class="w3-right w3-tag   w3-round">$13.00</span></h4>
+									</div>
+									<div class="panel-body">Fried langoustin, cream cheese spicy tuna, crunch sushi sauce,chipotle honey</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Fried Philly</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Deep fried roll of avocado, cream cheese, salmon and sushi sauce</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>TNT</b><span class="w3-right w3-tag   w3-round">$11.00</span></h4>
+									</div>
+									<div class="panel-body">Salmon, tuna, yellow tail, radish sprout, pickled radish and sriracha sauce</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Dragon</b><span class="w3-right w3-tag   w3-round">$12.00</span></h4>
+									</div>
+									<div class="panel-body">California topped with eel, fried sweet potato and sushi sauce</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Sun Rise</b><span class="w3-right w3-tag   w3-round">$12.00</span></h4>
+									</div>
+									<div class="panel-body">California roll topped with salmon, smelt egg, sushi sauce, crunch</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Mango Tango</b><span class="w3-right w3-tag   w3-round">$13.00</span></h4>
+									</div>
+									<div class="panel-body">Asparagus, shrimp, creamcheese, mango, chipotle honey, sprouts</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Healthy N Clean</b><span class="w3-right w3-tag   w3-round">$11.00</span></h4>
+									</div>
+									<div class="panel-body">Salmon, tuna, yellowtail wrapped in cucumber, ponzu</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Take A Chance</b><span class="w3-right w3-tag   w3-round">$15.00</span></h4>
+									</div>
+									<div class="panel-body">Spicy crab, creamcheese, shrimp topped with eel, avocado, wasabi mayo, cajun sauce, served on fire,</div>
+								</div>
+							</div>
+							<!--Appetizer Section-->
+							<div id="Appetizers" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Edamame</b><span class="w3-right w3-tag   w3-round">$4.00</span></h4>
+									</div>
+									<div class="panel-body">Steamed Soy Beans with Sea Salt</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>House Salad</b><span class="w3-right w3-tag   w3-round">$4.00</span></h4>
+									</div>
+									<div class="panel-body">House made mixed green with creamy sesame or soy wasabi dressing</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Veggie Spring Roll</b><span class="w3-right w3-tag   w3-round">$5.00</span></h4>
+									</div>
+									<div class="panel-body">Fried Veggie Spring Rolls, sweet and sour sauce</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Veggie Gyoza</b><span class="w3-right w3-tag   w3-round">$6.00</span></h4>
+									</div>
+									<div class="panel-body">Pan fried soy bean and veggie dumplings</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Spicy Edamame</b><span class="w3-right w3-tag   w3-round">$5.00</span></h4>
+									</div>
+									<div class="panel-body">Steamed Soy Beans with Sea Salt</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Chicken Kara Age</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Bite sized popcorn chicken, lemon and teriyaki sauce</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Gyoza</b><span class="w3-right w3-tag   w3-round">$6.00</span></h4>
+									</div>
+									<div class="panel-body">Japanese pan fried pork dumplings</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Crispy Takoyaki</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Octopus wheat cake</div>
+								</div>
+							</div>
+							<!--Ramen Section-->
+							<div id="Ramen" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Katsudon</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Simmered breaded pork in pork broth with egg, and caramelized onion</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Pork Bone Ramen</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Rich Pork Bone Marrow Broth, Slow Roasted Pork Belly, Scallion Pickled Ginger, Fish Cake, Bamboo Black Garlic Oil</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Spicy Miso Ramen</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Miso based spicy broth, ground chili slow roasted pork belly, pickled ginger scallion, fish cake, bamboo, hot chili oil</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Spicy Beef Ramen</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Simmered thin sliced beef in soy sauce broth with caramelized onion, bamboo ground chili, scallion, pickled ginger</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Umami Mushroom Ramen</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Umami shitake mushroom broth, slow roasted pork belly, pickled ginger, scallion, fish cake, bamboo, black garlic oil</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Tenzaru Soba</b><span class="w3-right w3-tag   w3-round">$11.00</span></h4>
+									</div>
+									<div class="panel-body">Buckwheat noodle with savory dashi, mirin, soy sauce, served with shrimp and/or veggie tempura, noodle served cold</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Tempura Udon</b><span class="w3-right w3-tag   w3-round">$11.00</span></h4>
+									</div>
+									<div class="panel-body">Thick rice noodle in fish broth with fish cake, scallion, served with shrimp and/or vegetable tempura set</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Katsu Curry</b><span class="w3-right w3-tag   w3-round">$12.00</span></h4>
+									</div>
+									<div class="panel-body">Japanese style curry sweet potato, asian pumpkin, fried pork(also available with chicken)</div>
+								</div>
+
+							</div>
+							<!--Poke/Salad Section-->
+							<div id="PokeSalad" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Ramen Salad</b><span class="w3-right w3-tag   w3-round">$10.00</span></h4>
+									</div>
+									<div class="panel-body">Our signature ramen, roasted pork belly, bamboo, creamy sesame or soy wasabi vinaigrette </div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Tuna Poke</b><span class="w3-right w3-tag   w3-round">$18.00</span></h4>
+									</div>
+									<div class="panel-body">Ahi tuna, avocado, seaweed, smelt egg</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Salmon Poke</b><span class="w3-right w3-tag   w3-round">$15.00</span></h4>
+									</div>
+									<div class="panel-body">Salmon, avocado, seaweed, smelt egg</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Yellowtail Poke</b><span class="w3-right w3-tag   w3-round">$18.00</span></h4>
+									</div>
+									<div class="panel-body">Yellowtail, avocado, seaweed, smelt egg</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Salmon Rind Salad</b><span class="w3-right w3-tag   w3-round">$8.00</span></h4>
+									</div>
+									<div class="panel-body">Soy wasabi vinaigrette or cream sesamy</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Seared Tuna Salad</b><span class="w3-right w3-tag   w3-round">$12.00</span></h4>
+									</div>
+									<div class="panel-body">Garlic, pepper seared tuna soy wasabi vinaigrette or creamy seasamy </div>
+								</div>
+
+							</div>
+							<!--Nigiri Section-->
+							<div id="Nigiri" class="w3-container menu">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4><b>Crispy Takoyaki</b><span class="w3-right w3-tag   w3-round">$7.00</span></h4>
+									</div>
+									<div class="panel-body">Octopus wheat cake</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Reservation Section -->
+	<section class="reservation-section" >
+
+		<div class="paraimg3 w3-display-container w3-opacity-min" >
+			<div class="w3-display-middle" id="reservation">
+				<span class="w3-xxlarge w3-text-light-grey w3-wide">RESERVATION</span>
+			</div>
+		</div>
+
+		<div class="container w3-padding-24" id="resv-wrap">
+
+			<h6 style="font-family: Montserrat;">MAKE A RESERVATION</h6>
+
+			<div class="onpage-resvform-container">
+				<form class="onpage-resvform-style " id="onpage-form-resv" >
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="input-group" id="input-wrap">
+								<span class="input-group-addon" id="glyphName"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text" class="form-control " id="onpage-form-resvname" placeholder="Enter Full Name" data-validation-regexp="^([a-z]+)$" required>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="input-group" id="input-wrap">
+								<span class="input-group-addon" id="glyphEmail"><i class="glyphicon glyphicon-envelope"></i></span>
+								<input type="email" class="form-control" id="onpage-form-resvemail" title="Email" placeholder="email@example.com" data-error="Please enter a valid email. user@example.com" required>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="input-group" id="input-wrap">
+								<span class="input-group-addon" id="glyphPhone"><i class="glyphicon glyphicon-phone"></i></span>
+								<input class="form-control" id="onpage-form-resvphone" placeholder="(xxx) xxx-xxxx" required>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-4 ">
+							<div class="input-group" id="input-wrap" style="">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+								<input class="form-control" ng-model="ctrl.input" id="onpage-form-resvdate" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.input" format="LLL" min-view="year" start-view="month" min-date="ctrl.minDateMoment"
+									max-date="ctrl.maxDateMoment" autoclose="true" locale="en" >
+							</div>
+						</div>
+
+						<div class="col-sm-4 ">
+							<div class="input-group" id="input-wrap">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<select id="onpage-form-resvgroup" class="form-control" name="partySize">
+            <option value="1 person">1 person</option>
+            <option value="2 people">2 people</option>
+            <option value="3 people">3 people</option>
+            <option value="4 people">4 people</option>
+            <option value="5 people">5 people</option>
+          </select>
+							</div>
+						</div>
+						
+						<div class="col-sm-4 ">
+							<div class="input-group" id="input-wrap">
+								<input type="submit" class="btn btn-info btn-block" id="onpage-form-btnResv" value="Create reservation">
+							</div>
+						</div>
+						
+					</div>
+				</form>
+			</div>
+			<br />
+
+			<div class="row" id="resvbyphone">
+				<div style="width: 80%; height: 20px; border-bottom: 1px solid #FFD65E; display:inline-block;">
+					<img src="./src/assets/images/oie_transparent.png" style="width: 40px">
+				</div>
+
+				<div class="resvbyphone col-sm-6 col-md-4">
+					<h3 style="font-family: Montserrat;">RESERVE BY PHONE</h3>
+					<p>We take reservations for lunch and dinner. To make a reservation, please call us at (314) 726 6477 between 11am-10pm, Monday to Friday.</p>
+					<p>We do not book the bar area – we leave this for walk-in guests to ensure that we always offer some tables for those who have not booked.</p>
+				</div>
+				<div class="col-sm-2 col-md-4"></div>
+				<div class="resvbyphone col-sm-4 col-md-4">
+
+					<img src="./src/assets/images/o.jpg" class="w3-round w3-image" alt="Candlelit Date">
+
+
+
+				</div>
+			</div>
+
+
+		</div>
+
+
+	</section>
+
+	<!-- Container (Contact Section) -->
+	<section class="contact-section">
+		<div class="paraimg2 w3-display-container w3-opacity-min " id="contact">
+			<div class="w3-display-middle">
+				<span class="w3-xxlarge w3-text-light-grey w3-wide">CONTACT</span>
+
+			</div>
+		</div>
+
+		<div class="container-fluid  w3-padding-24">
+			<div class="row">
+				<div class="col-sm-5">
+					<div id="googleMap" style="height:400px;width:100%;"></div>
+				</div>
+				<div class="col-sm-7 slideanim">
+					<div class='row'>
+						<p>Contact us and we'll get back to you within 24 hours.</p>
+						<p><span class="glyphicon glyphicon-map-marker"></span> St.Louis, MO 63130</p>
+						<p><span class="glyphicon glyphicon-phone"></span> 314-726-6477</p>
+						<p><span class="glyphicon glyphicon-envelope"></span> manager@blueoceansushi.com </p>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+						</div>
+						<div class="col-sm-6 form-group">
+							<input class="form-control" id="fdbckemail" name="email" placeholder="Email" type="email" required>
+						</div>
+					</div>
+					<textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+					<div class="row">
+						<div class="col-sm-12 form-group">
+							<button class="btn btn-default pull-right" type="submit">Send</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	<footer class="text-center">
+		<a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+			<span class="glyphicon glyphicon-chevron-up"></span>
+		</a>
+
+		<div class="footerstyle container-fluid">
+			<div class="row">
+
+				<!--First column-->
+				<div class="footer-text-style col-md-3 col-md-offset-1">
+					<h5 class="title">BLUE OCEAN RESTAURANT</h5>
+					<p>Stuff goes here.</p>
+
+					<p>Stuff goes here.</p>
+				</div>
+				<!--/.First column-->
+
+				<hr class="hidden-md hidden-lg">
+
+				<!--Second column-->
+				<div class="col-md-2">
+					<h5 class="title">You</h5>
+					<ul>
+						<li><a href="signIn.html">Login</a></li>
+						<li><a href="#!">Register</a></li>
+						<li><a href="#!">Need a reservation?</a></li>
+					</ul>
+				</div>
+				<!--/.Second column-->
+
+				<hr class="hidden-md hidden-lg">
+
+				<!--Third column-->
+				<div class="col-md-2">
+					<h5 class="title">Second column</h5>
+					<ul>
+						<li><button id="btnEmail" onclick="sendEmail()" value="Send Email">
+							
+								</button></li>
+						<li><a href="#!">Link 2</a></li>
+						<li><a href="#!">Link 3</a></li>
+						<li><a href="#!">Link 4</a></li>
+					</ul>
+				</div>
+				<!--/.Third column-->
+
+				<hr class="hidden-md hidden-lg">
+
+				<!--Fourth column-->
+				<div class="col-md-2">
+					<h5 class="title">Third column</h5>
+					<ul>
+						<li>
+							<a href="#!"></a>
+						</li>
+						<li><a href="#!">Link 2</a></li>
+						<li><a href="#!">Link 3</a></li>
+						<li><a href="#!">Link 4</a></li>
+					</ul>
+				</div>
+				<!--/.Fourth column-->
+
+			</div>
+		</div>
+
+
+
+	</footer>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+	<script src="./src/components/moment-with-locales.js"></script>
+	<script src="./src/components/angular-moment-picker.min.js"></script>
+	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.js"></script>
+	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+	<script src="./src/components/something.js"></script>
+	<script src="./src/components/jq-masked-input.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpbOWvfPGFbRedBZf_5ZLPmGhJtItn9kY&callback=myMap"></script>
+	<script src="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.js"></script>
+
+
+	<script>
+		// Setup validation on all forms
+		$.validate({
+			form: '#signUp-modal'
+		});
+
+		$(document).ready(function() {
+			$("#nav-btnResv").click(function() {
+				$("#resv-modal").modal();
+			});
+
+		});
+
+		$(document).ready(function() {
+			$("#nav-btnLogin").click(function() {
+				$("#signIn-modal").modal('show');
+			});
+		});
+
+		$(document).ready(function() {
+			$("#nav-btnSignUp").click(function() {
+				$("#signUp-modal").modal('show');
+
+			});
+		});
+
+		$(document).ready(function() {
+			$("#btnUp").click(function() {
+				$("#actconfirm").modal();
+			});
+
+		});
+
+		jQuery(function($) {
+
+			$("#onpage-form-resvphone").mask("(999) 999-9999?", {
+				placeholder: "(xxx) xxx-xxxx",
+				autoclear: false
+			});
+			$("#signup-form-phnnum").mask("(999) 999-9999?", {
+				placeholder: "(xxx) xxx-xxxx"
+			});
+			$("#resv-modal-phnnum").mask("(999) 999-9999?", {
+				placeholder: "(xxx) xxx-xxxx"
+			});
+
+
+		});
+
+
+		//http://stackoverflow.com/questions/32180776/precise-js-daily-repeat-countdown-timer
+		//http://stackoverflow.com/questions/20618355/the-simplest-possible-javascript-countdown-timer
+		//https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/
+		//https://www.w3schools.com/howto/howto_css_social_media_buttons.asp signup-form-phnnum resv-modal-phnnum
+		//https://talkerscode.com/webtricks/add-edit-and-delete-rows-from-table-dynamically-using-javascript.php
+		//https://www.firebase.com/docs/web/guide/saving-data.html#section-set
+	</script>
+
+	<!--
+Automatic countdown timer
+-->
+	<script type="text/javascript">
+		function getSeconds() {
+			var now = new Date();
+			var time = now.getTime(); // time now in milliseconds
+			var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0); //  1600 hrs or 4pm
+
+			var ft = midnight.getTime() + 86400000; // add one day
+			var diff = ft - time;
+			diff = parseInt(diff / 1000);
+			if (diff > 86400) {
+				diff = diff - 86400
+			}
+			startTimer(diff);
+		}
+
+
+		var timeInSecs;
+		var ticker;
+
+		function startTimer(secs) {
+			timeInSecs = parseInt(secs);
+			ticker = setInterval("tick()", 1000);
+			tick(); // to start counter display right away
+		}
+
+		$('#onpage-form-resvname').bind('keyup blur', function() {
+			var x = $(this);
+			x.val(x.val().replace(/[^a-zA-Z ]/g, ''));
+		});
+
+
+		function tick() {
+			var secs = timeInSecs;
+			if (secs > 0) {
+				timeInSecs--;
+			} else {
+				clearInterval(ticker); // stop counting at zero
+				//getSeconds();  // and start again if required
+			}
+
+			var hours = Math.floor(secs / 3600);
+			secs %= 3600;
+			var mins = Math.floor(secs / 60);
+			secs %= 60;
+			var resultA = ((hours < 10) ? "0" : "") + hours + "";
+			var resultB = ((mins < 10) ? "0" : "") + mins + "";
+			var resultC = ((secs < 10) ? "0" : "") + secs + "";
+			document.getElementById("cdHour").innerHTML = resultA;
+			document.getElementById("cdMin").innerHTML = resultB;
+			document.getElementById("cdSec").innerHTML = resultC;
+		}
+	</script>
+	<script src="https://unpkg.com/querybase@0.6.0"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.8/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
+
+
+	<script src="newApp.js"></script>
+
+		<script>
+		window.addEventListener("load", function(event) {
+			initApp();
+			sendEmail();
+			console.log("All resources finished loading!");
+		});
+	</script>
+	
+
+</body>
+
+</html>
