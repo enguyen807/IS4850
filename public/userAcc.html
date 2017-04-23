@@ -318,14 +318,14 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 			var ResvInfo = fullName + phnNum + ResvDate + NumPeopl + ResvUID + ResvEmail
 
 			if (user.uid == ResvUID) {
-				var resvData = ('<tr><td ="specialKey">' + specialKey + '</td><td>' + fullName + '</td><td>' + user.email + '</td><td>' + phnNum + '</td><td>' + ResvDate + '</td><td>' + NumPeopl + '</td><td>' + '<button type="button" class="btn btn-default btn-sm" data-key=' + ResvInfo.key + ' id="cancelResv"><span class="glyphicon glyphicon-remove"></span> Cancel</button>' + '</td></tr>')
+				var resvData = ('<tr><td ="specialKey">' + specialKey + '</td><td>' + fullName + '</td><td>' + user.email + '</td><td>' + phnNum + '</td><td>' + ResvDate + '</td><td>' + NumPeopl + '</td><td>' + '<button type="button" onclick="deleteUserRow(uid)" class="btn btn-default btn-sm" data-key=' + ResvInfo.key + ' id="cancelResv"><span class="glyphicon glyphicon-remove"></span> Cancel</button>' + '</td></tr>')
 				$("#userResvTable").append(resvData);
 			
 			} else {
 				console.log("error");
 			}
 			
-			$('#userResvTable').on('click', 'button[type="button"]', function(snapshot) {
+			/*$('#userResvTable').on('click', 'button[type="button"]', function(snapshot) {
 			$(this).closest('tr').remove();
 			alert(specialKey);
 			var resvbTabRef = firebase.database().ref("Reservation/user/")
@@ -349,7 +349,11 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 				})
 
 
-		})
+		})*/
+
+
+
+
 
 
 		})
