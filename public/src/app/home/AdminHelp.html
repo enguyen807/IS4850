@@ -1,0 +1,126 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+  <link rel="stylesheet" href="./src/less/angular-moment-picker.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="./src/less/about.css">
+  <link rel="stylesheet" href="./src/less/animate.css">
+  <link rel="stylesheet" href="../../less/w3.css">
+  <link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.css" />
+
+
+  <style>
+    h1 {
+      margin-left: 15px;
+      margin-bottom: 20px;
+    }
+    
+    @media (min-width: 768px) {
+      .brand-pills> li> a {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      li.brand-nav.active a:after {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-left: 9px solid #428bca;
+        position: absolute;
+        top: 50%;
+        margin-top: -20px;
+        left: 100%;
+        z-index: 2;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>Admin Help</h1>
+      <div role="tabpanel">
+        <div class="col-sm-3">
+          <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
+            <li role="presentation" class="brand-nav active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">How to Create a Reservation</a></li>
+            <li role="presentation" class="brand-nav"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">How to View Reservations</a></li>
+            <li role="presentation" class="brand-nav"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">How to Modify/Cancel a Reservation </a></li>
+            <li role="presentation" class="brand-nav"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">How to Reward Loyalty Points</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 ">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tab1">
+              <ol>
+                <li>Click on the “Reservation” button in the upper right-hand corner of the Blue Ocean Website.</li>
+                <li>Fill out the fields marked with a *, these are mandatory. (If you are logged in, the contact fields will be filled in for you.)</li>
+                <ol type="a">
+                  <li>NOTE: If you have already created an account, but are not logged in, click the blue Sign in tab to avoid filling out the name and contact information.</li>
+                </ol>
+                <li>Select a date and time using the calendar fields near the bottom of the form.</li>
+                <li>Choose the number of guests (1-5) in your party using the drop-down menu in the bottom right.</li>
+                <ol type="a">
+                  <li>NOTE: If your reservation is for more than 5 people we request that you call in advance.</li>
+                </ol>
+                <li>Click the large “Create reservation” button to submit.</li>
+                <li>You will see notification on the screen that an email has been sent to you account.</li>
+                <li>Check the email account you entered for confirmation.</li>
+              </ol>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab2">
+              <ol>
+                <li>After you login with the administrative credentials, choose “account management” from the dropdown menu with your account name on it.</li>
+                <li> From here you can see registered users in the center of the screen, and any active reservations below that.</li>
+                <li>Under the word “Reservations” there are two tabs. The tab that comes up by default is labelled “Users” and will show reservations made by customers with accounts.</li>
+                <li>To view reservations created by customers without accounts, click on the “Guests” tab. Clicking on these tabs will toggle back and forth between user reservations and guest reservations.
+                </li>
+              </ol>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab3">
+              <ol>
+                <li>After you login with your credentials, choose “account management” from the dropdown menu with your account name on it.</li>
+                <li>Any active reservations will be displayed here.</li>
+                <li>How to Cancel:</li>
+                <ol type="a">
+                  <li>Click the gray “cancel” button next to the reservation you wish to cancel.</li>
+                  <li>A popup will appear asking confirming your actions.</li>
+                  <li>Clicking “Yes” will delete the reservation. Clicking “No” will keep the reservation intact. </li>
+                </ol>
+                <li>How to Edit:</li>
+                <ol type="a">
+                  <li>Click the gray “edit” button next to the reservation. </li>
+                  <li>Change the necessary information.</li>
+                  <li>Click the “OK” button to confirm the changes.</li>
+                </ol>
+              </ol>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab4">
+              <ol>
+                <li>After you login with the administrative credentials, choose “account management” from the dropdown menu with your account name on it.</li>
+                <li>Active Users will be displayed on the account page. </li>
+                <li>Upon customer arrival, click the gray “Give Points” box that corresponds with the customer’s account. </li>
+                <ol type="a">
+                  <li>Note: Points will be rewarded in increments of 100.</li>
+                </ol>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,39 +1,13 @@
 /*aboutStyle.css 
 
-	
-    .carousel-inner img
-	{
-	  
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-		}
-		
-	------------------------- 	
-	.carousel-caption{
-    top: 40% !important;
-    bottom: initial;
-    transform: translateY(-45%);
-    font-family: Montserrat;
-
-		}
-		
-	
-		
-.carousel img {
-    width: 100%;
-    opacity: 0.8
-}
-*/	
 
                             /*SITE NAVIGATION BAR*/
 
 html, body{
     height: 100%;
-   
+   	width: 100%;
+		background-color: #FFFFFF;
+/* 		overflow-x:hidden; */
 }
 
 
@@ -41,7 +15,7 @@ html, body{
 
 .navbar-default 
 {
-  background-color: #323232  !important;
+  background-color: #343434  !important;
   font-size: 12px !important;
   letter-spacing: 4px;
   opacity:0.9;
@@ -58,19 +32,19 @@ html, body{
 /* Add a gray color to all navbar links */
 .navbar li a, .navbar .navbar-brand 
 { 
-    color: #d5d5d5 !important;
+    color: #F7F7FF !important;
 }
 
 /* On hover, the links will turn white */
 .navbar-nav li a:hover 
 {
-    color: #fff !important;
+    color: #D0B17A !important;
 }
 
 
 /* The active link */
 .navbar-nav li.active a {
-    color: #fff !important;
+    color: #D0B17A !important;
     background-color:#29292c !important;
 }
 
@@ -93,7 +67,8 @@ html, body{
 
 /* On hover, the dropdown links will turn red */
 .dropdown-menu li a:hover {
-    background-color: red !important;
+    background-color: black !important;
+		
 }
 
 .btn3
@@ -102,21 +77,46 @@ html, body{
 
 }
 
+		.paraimg1 {
 
+			background-image: url('../assets/images/IMG_8630.JPG');
+			min-height: 400px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+			z-index:1;
+			
+				
+		}
+		
+		.paraimg2 {
 
-
-
-.carousel-caption h1:first-child {
-  animation-delay:1s;
-  
-  
-}
-
-.carousel-caption p{
-  animation-delay:1.3s;
-}
+			background-image: url('../assets/images/IMG_8687.JPG');
+			min-height: 400px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+			z-index:1
+		}
+		
+		.paraimg3 {
+			background-image: url('../assets/images/sdgf.jpg');
+			min-height: 400px;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+			z-index:1
+		}
 
  @media (max-width: 840px) {
+
+	 .footerstyle {
+		 text-align:center;
+	 }
+	 
   .navbar-header {
       float: none;
   }
@@ -189,23 +189,22 @@ header .header-content {
   
 }
 header .header-content .header-content-inner h1 {
-  font-weight: 700;
   text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 30px;
-  
+  font-family: Righteous;
+  font-size: 40px;
+	
 }
 header .header-content .header-content-inner hr {
   margin: 30px auto;
 }
 header .header-content .header-content-inner  {
-  font-weight: 1000;
+  font-weight: 900;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
-  margin-bottom: 50px;
-  transform: translateY(100%);
-  font-family: Montserrat;
+  margin-bottom: 40px;
+  transform: translateY(80%);
+  
   
   
 }
@@ -302,17 +301,11 @@ width: 18%;
     display: none;
 }
 
-.btn-default{
-  height: 30px;
-  text-align: center;
-  line-height: 0px;
-  color: #ffffff;
-  background-color: #3276b1;
-  border-color: #285e8e;
-}
 
-.btn-default:active:focus{
-  color: red;
+
+.btn-default:hover{
+  background-color: #D0B17A;
+    color: white;
 }
 
     ul#filter { 
@@ -346,7 +339,7 @@ ul#filter li {
   line-height: 0px;
   color: #555555;
   background-color: #ffffff;
-   border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
                             /*SITE FOOTER*/
@@ -365,4 +358,3 @@ footer a:hover {
     color: #777;
     text-decoration: none;
 }
-

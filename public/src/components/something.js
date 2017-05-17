@@ -10,7 +10,7 @@ var datNtim = angular.module('myApp', ['moment-picker'])
             hoursFormat:   'h A' ,
             minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
             hoursStart:       11,
-            hoursEnd:         21,
+            hoursEnd:         20,
             minutesStep:      15
             
             
@@ -51,45 +51,45 @@ function myMap() {
 marker.setMap(map,'styles',styles);
 }
 /* Menu Sorter */
-function openMenu(evt, menuName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("menu");
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-     tablinks[i].className = tablinks[i].className.replace();
-  }
-  document.getElementById(menuName).style.display = "block";
- 
-}
-document.getElementById("myLink").click();
+//function openMenu(evt, menuName) {
+//  var i, x, tablinks;
+//  x = document.getElementsByClassName("menu");
+//  for (i = 0; i < x.length; i++) {
+//     x[i].style.display = "none";
+//  }
+//  tablinks = document.getElementsByClassName("tablink");
+//  for (i = 0; i < x.length; i++) {
+//     tablinks[i].className = tablinks[i].className.replace();
+//  }
+//  document.getElementById(menuName).style.display = "block";
+// 
+//}
+//document.getElementById("myLink").click();
 
-$('.list-group-item tablink').on('click','> a', function(e) {
-   var $this = $(this);
-    $('.list-group-item').find('.active').removeClass('active');
-    $this.addClass('active');
-    
-    
-});
+//$('.list-group-item tablink').on('click','> a', function(e) {
+//   var $this = $(this);
+//    $('.list-group-item').find('.active').removeClass('active');
+//    $this.addClass('active');
+//    
+//    
+//});
 /* Smooth Scrolling */
-$(document).ready(function(){
+// $(document).ready(function(){
   
-  $(".navbar a").on('click', function(event) {
+//   $(".navbar a").on('click', function(event) {
 
-    if (this.hash !== "") {
+//     if (this.hash !== "") {
       
-      event.preventDefault();
-      var hash = this.hash;
+//       event.preventDefault();
+//       var hash = this.hash;
 
-      $('html, body').animate({
-        scrollTop: $(hash).offset().top
-      }, 900, function(){
+//       $('html, body').animate({
+//         scrollTop: $(hash).offset().top
+//       }, 900, function(){
    
-        window.location.hash = hash;
-      });
-    } // End if
-  });
-});
+//         window.location.hash = hash;
+//       });
+//     } // End if
+//   });
+// });
 

@@ -1,0 +1,156 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="./src/less/about.css">
+	<link rel="stylesheet" href="./src/less/animate.css">
+	<link rel="stylesheet" href="../../less/w3.css">
+	<link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.css" />
+
+
+	<style>
+		h1 {
+			margin-left: 15px;
+			margin-bottom: 20px;
+		}
+		
+		@media (min-width: 768px) {
+			.brand-pills> li> a {
+				border-top-right-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+			li.brand-nav.active a:after {
+				content: " ";
+				display: block;
+				width: 0;
+				height: 0;
+				border-top: 20px solid transparent;
+				border-bottom: 20px solid transparent;
+				border-left: 9px solid #428bca;
+				position: absolute;
+				top: 50%;
+				margin-top: -20px;
+				left: 100%;
+				z-index: 2;
+			}
+		}
+	</style>
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="row">
+			<h1>Customer Help</h1>
+			<div role="tabpanel">
+				<div class="col-sm-3">
+					<ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
+						<li role="presentation" class="brand-nav active"><a href="#CreateAnAccount" aria-controls="tab1" role="tab" data-toggle="tab">How to Create an Account</a></li>
+						<li role="presentation" class="brand-nav"><a href="#LoginToAccount" aria-controls="tab2" role="tab" data-toggle="tab">How to Login if you have an Account</a></li>
+						<li role="presentation" class="brand-nav"><a href="#ResetYourPsw" aria-controls="tab3" role="tab" data-toggle="tab">How to Reset your Password</a></li>
+						<li role="presentation" class="brand-nav"><a href="#CreateReservation" aria-controls="tab4" role="tab" data-toggle="tab">How to Create a Reservation</a></li>
+						<li role="presentation" class="brand-nav"><a href="#CancelReservationAsGuest" aria-controls="tab5" role="tab" data-toggle="tab">Cancelling a Reservation as a Guest</a></li>
+						<li role="presentation" class="brand-nav"><a href="#ViewEditProfile" aria-controls="tab6" role="tab" data-toggle="tab">How to View/Edit Customer Profile</a></li>
+						<li role="presentation" class="brand-nav"><a href="#CancelReservationAsUser" aria-controls="tab7" role="tab" data-toggle="tab">Cancelling a Reservation as a User</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-9 ">
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="CreateAnAccount">
+							<ol>
+								<li>Click the Sign up button located in the top right corner of the Blue Ocean website.</li>
+								<li>A form will appear after clicking the Sign up button. Please fill out all of the required fields.</li>
+								<li>Note: You will not be able to create an account without every field filled out.</li>
+								<li>Click Create an Account and you will be redirected back to the home page. </li>
+							</ol>
+							<img src="../../assets/images/createAcc.PNG" class="img-responsive pull-right">
+							
+
+						</div>
+						<div role="tabpanel" class="tab-pane" id="LoginToAccount">
+							<p id="login">
+								If you already have an account with Blue Ocean Restaurant, simply fill out your user email and password.
+							</p>
+							<ol>
+								<li>Put the email address you used when originally creating your account into the Username box.</li>
+								<li>Put in your personally created password in the password box.</li>
+								<li>Click Sign in.</li>
+							</ol>
+							<img src="../../assets/images/login.PNG" class="img-responsive pull-right">
+						</div>
+						<div role="tabpanel" class="tab-pane" id="ResetYourPsw">
+							<ol>
+								<li>In the Sign-in form, click Forgot Password?</li>
+								<li>Type in the email address you used when you first created your account and click submit</li>
+								<li>The system will send you an email with a link.</li>
+								<li>Upon clicking the link in the email, you will see a form with a field requesting your new password.</li>
+								<li>You can then return to the sign-in page and use your email address with the new password.</li>
+							</ol>
+							<img src="../../assets/images/pswReset.PNG" class="img-responsive pull-right">
+						</div>
+						<div role="tabpanel" class="tab-pane" id="CreateReservation">
+							<ol>
+								<li>Click on the “Reservation” button in the upper right-hand corner of the Blue Ocean Website.</li>
+								<li>Fill out the fields marked with a *, these are mandatory. (If you are logged in, the contact fields will be filled in for you.)</li>
+								<ol type="a">
+									<li>NOTE: If you have already created an account, but are not logged in, click the blue Sign in tab to avoid filling out the name and contact information.</li>
+								</ol>
+								<li>Select a date and time using the calendar fields near the bottom of the form.</li>
+								<li>Choose the number of guests (1-5) in your party using the drop-down menu in the bottom right.</li>
+								<ol type="a">
+									<li>NOTE: If your reservation is for more than 5 people we request that you call in advance.</li>
+								</ol>
+								<li>Click the large “Create reservation” button to submit.</li>
+								<li>You will see notification on the screen that an email has been sent to you account.</li>
+								<li>Check the email account you entered for confirmation.</li>
+							</ol>
+							<img src="../../assets/images/reservation.PNG" class="img-responsive pull-right">
+						</div>
+						<div role="tabpanel" class="tab-pane" id="CancelReservationAsGuest">
+							<ol>
+								<li>From the reservation module. Click on the red button at the bottom that states “Cancel an Existing Reservation”.</li>
+								<li>Upon clicking on it you will need to provide some information to locate your reservation.</li>
+								<li>Head on over to your email which you’ve used to make a reservation. Locate the date(Month, Day, Year) and your confirmation id(-KjPriYDPINSUvOzaz8o) do not include the period. </li>
+								<ol type="a">
+									<li>NOTE: If the information you’ve entered matches an alert will popup stating that your reservation has been deleted.</li>
+								</ol>
+								<li>Upon clicking the link in the email, you will see a form with a field requesting your new password.</li>
+								<li>You can then return to the sign-in page and use your email address with the new password.</li>
+							</ol>
+							<img src="../../assets/images/cancelreservation.PNG" class="img-responsive pull-right">
+							<img src="../../assets/images/cancelresvemail.PNG" class="img-responsive pull-right">
+						</div>
+						<div role="tabpanel" class="tab-pane" id="ViewEditProfile">
+							<ol>
+								<li>After you login with your credentials, choose “account management” from the dropdown menu with your account name on it.</li>
+								<li>From here you can see any active reservations in the center of the screen.</li>
+								<li>Loyalty points will be displayed in the lower left-hand corner of the screen.</li>
+								<li>To edit your name, email, or phone number, click on the tab labelled “Edit Profile.” The fields can be edited on screen.</li>
+							</ol>
+							<img src="../../assets/images/editProf.PNG" class="img-responsive pull-right">
+						</div>
+						<div role="tabpanel" class="tab-pane" id="CancelReservationAsUser">
+							<ol>
+								<li>After you login with your credentials, choose “account management” from the dropdown menu with your account name on it.</li>
+								<li>Any active reservations will be displayed here</li>
+								<li>Click the gray “cancel” button next to the reservation you wish to cancel. </li>
+							</ol>
+							<img src="../../assets/images/activeresv.PNG" class="img-responsive pull-right">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+</html>

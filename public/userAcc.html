@@ -17,20 +17,7 @@ l
 	<link rel="stylesheet" href="./src/less/animate.css">
 	<link rel="stylesheet" href="./src/less/w3.css">
 	<link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
-	<!--
-http://stackoverflow.com/questions/36172986/making-web-form-for-updating-data-in-firebase
-http://stackoverflow.com/questions/38704622/firebase-how-to-use-child-changed-with-tables
-https://vitalets.github.io/x-editable/demo-bs3.html***
-http://bootsnipp.com/snippets/3X6zm
-http://bootsnipp.com/snippets/56ExR
-http://jsfiddle.net/SPddm/300/
-http://stackoverflow.com/questions/9649877/how-to-disable-enable-input-field-on-click-with-jquery
-http://stackoverflow.com/questions/18350923/jquery-enabling-disabling-datepicker
-https://github.com/smalot/bootstrap-datetimepicker/issues/33
-https://www.firebase.com/docs/web/guide/retrieving-data.html#section-queries
-https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
--->
-
+	<script src="sorttable.js"></script>
 
 
 	<style>
@@ -44,7 +31,12 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 			border-width: 1px;
 		}
 	</style>
-
+	<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+	<script type="text/javascript">
+		(function() {
+			emailjs.init("user_svZaYyhmMeCSclcHuLGtA");
+		})();
+	</script>
 
 </head>
 
@@ -59,112 +51,122 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span> 
                 </button>
-				<a class="navbar-brand" href="index.html">BLUE OCEAN</a>
+				<a class="navbar-brand" href="index.html">
+					<img src="./src/assets/images/blueoceanlogo.png" class="img-responsive" width="100" height="50" alt="">
+				</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="src/app/home/UserHelp.html" target="_blank"><i class="glyphicon glyphicon-question-sign pull-left"></i></a>	
+					</li>
+					
 					<li class="dropdown"><a class="dropdown-toggle btn-action" id="btnWelcomeUser" data-toggle="dropdown" href="#">Welcome <span id="userNavName"></span> <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="" id="editProfile">EDIT PROFILE</a></li>
-							<li><a href="#signOut" id="ubtnSignOut">SIGN OUT</a></li>
+							<li><a id="ubtnSignOut">SIGN OUT</a></li>
 						</ul>
 					</li>
-						<li class="btn3">
-							<button type="button" class="btn btn-default btn-lg" id="nav-btnResv">Reservation</button>
-						</li>
-					<li>
-
-					</li>
-					<li>
-
+					<li class="btn3">
+						<button type="button" class="btn btn-default btn-lg" id="nav-btnResv" data-toggle="modal" data-target="#resv-modal">Reservation</button>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
+	<!--Cancel Modal 	 -->
+	<div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="padding:35px 50px;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Are you sure you want to cancel your reservation?</h4>
+				</div>
+				<div class="modal-body">
+					<p>We'll miss you and hope you come back</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary" data-backdrop="static" id="cbtnResv-modal">Yes</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!--Reservation Modal  -->
 	<div class="modal fade" id="resv-modal" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header" style="padding:35px 50px;">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
-					</div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="padding:35px 50px;">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
+				</div>
 
-					<div class="modal-body" style="padding:40px 50px;">
-						<div class="hide" id="userisLoggedIn">
-							<p>Would you like some loyalty points?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Create an account</a></p>
-							<p>Already have an account?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Sign In</a></p>
+				<div class="modal-body" style="padding:40px 50px;">
+					<form role="form" class="" id="onpage-form-resv" onsubmit="return handleReservations(this)">
+						<div class="form-group col-sm-12">
+							<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
+							<input type="text" class="form-control " id="onpage-form-resvfirstname" placeholder="Enter First Name" required>
+							<input type="text" class="form-control " id="onpage-form-resvlastname" placeholder="Enter Last Name" required>
 						</div>
 
-						<form role="form" class="">
-							<div class="input-group">
-								<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
-								<input type="text" class="form-control" id="resv-modal-firstname" placeholder="First Name*" required>
-								<input type="text" class="form-control" id="resv-modal-lastname" placeholder="Last Name*" required>
-							</div>
-
-							<div class="input-group">
-								<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
-								<input type="email" class="form-control" id="resv-modal-accemail" placeholder="Enter E-mail*" required>
-								<input type="text" class="form-control" id="resv-modal-phnnum" placeholder="Enter Phone Number*" required>
-							</div>
-
-							<div class="input-group">
+						<div class="form-group col-sm-12">
+							<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
+							<input type="text" class="form-control" id="onpage-form-resvemail" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" oninvalid="setCustomValidity('email@email.com')" placeholder="Enter E-mail*" required>
+							<input type="text" class="form-control" id="onpage-form-resvphone" placeholder="Enter Phone Number*" required>
+						</div>
+                        
+                            <div class="form-group col-sm-12">
 								<label for="spial"><span class="glyphicon glyphicon-pencil"></span> Special Request</label>
-								<textarea class="form-control" rows="5" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
+								<textarea class="form-control" rows="5" maxlength="100" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
 							</div>
 
-							<div class="form-group">
-								<label for="timNdate"><span class="glyphicon glyphicon-calendar"></span> Reservation Date</label>
-
-								<div id="resv-mod-input" class="resv-modal-input">
-									<div class="form-group col-sm-4">
-										<input class="form-control" id="resv-modal-date" ng-model="ctrl.datepicker" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.date" format="LL" min-view="year" start-view="month" min-date="ctrl.minDateMoment" max-date="ctrl.maxDateMoment"
-											autoclose="true" locale="en">
-									</div>
-
-									<div class="form-group col-sm-4">
-										<input class="form-control" id="resv-modal-time" format="LT" min-date="ctrl.minDateMoment" moment-picker="ctrl.time" placeholder="Select a time" ng-model="ctrl.timepicker" ng-model-options="{ updateOn: 'blur' }">
-									</div>
-
-									<div class="form-group col-sm-4">
-										<select name="people attending" style="padding:5px" class="ptysize col-sm-4" id="resv-modal-ptysize">
-                  <option value="1person">1 person</option>
-                  <option value="2person">2 people</option>
-                  <option value="3person">3 people</option>
-                  <option value="4person">4 people</option>
-                  <option value="5person">5 people</option>
-                </select>
-									</div>
-								</div>
+						<div class="form-group col-sm-12">
+							<div class="col-sm-12">
+								<label for="timNdate"><span class="glyphicon glyphicon-calendar "></span> Reservation Date</label>
 							</div>
 
+							<div class="form-group col-sm-6">
+								<input class="form-control" ng-model="ctrl.input" id="onpage-form-resvdate" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.input" format="MMMM DD, YYYY LT" min-view="year" start-view="month" min-date="ctrl.minDateMoment"
+									max-date="ctrl.maxDateMoment" autoclose="true" locale="en" required>
+							</div>
 
-
-							<!--<div class="checkbox">-->
-							<!--  <label><input type="checkbox" value="" checked>Yes, I want to receive email messages.</label>-->
-							<!--</div>-->
-							<input type="submit" class="btn btn-success btn-block" id="btnResv-modal" data-dismiss="modal" value="Create reservation">
-						</form>
-					</div>
-
-
+							<div class="form-group col-sm-6">
+				                <select name="people attending" class="ptysizes" style="width: 90%; height: 35" id="onpage-form-resvgroup">
+                                    <option value="1 person">1 person</option>
+                                    <option value="2 people">2 people</option>
+                                    <option value="3 people">3 people</option>
+                                    <option value="4 people">4 people</option>
+                                    <option value="5 people">5 people</option>
+                		          </select>
+											<a href="#" data-toggle="popover" data-trigger="hover" data-placement="top"  data-content="Call us at 314-726-6477 if you would like to make a reservation for a party of more than 5."><i class="glyphicon glyphicon-info-sign"></i></a>                                
+							</div>
+							
+								<label><input id="termcheckbox" type="checkbox" checked="checked" value="check" name="termcheckbox" required>I Agree to the <a href="src/app/home/TOC.html" target="_blank"><u>Terms and Conditions</u></a></label>
+							                            
+                            
+                            
+						</div>
+                        
+                        
+                        
+						<input type="submit" class="btn btn-success btn-block" id="onpage-form-btnResv" data-backdrop="static" value="Create reservation">
+					</form>
 				</div>
 			</div>
 		</div>
-	
-	
-	
-	
-	
-	
+	</div>
+	<!--Side Panel + Reservation Table 	 -->
 	<div class="container-fluid w3-padding-64 w3-sand" id="reservation">
 
 		<div class="col-lg-12 col-md-12 ">
 
 			<div class="col-md-2 col-lg-2 w3-light-blue hidden-sm hidden-xs">
+				<div>
+
+				</div>
 				<div class="panel-heading w3-center">
 					<h3>
 						<strong>
@@ -172,62 +174,93 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 						</strong>
 					</h3>
 				</div>
-				<div class="left-panel">
+				<div class="panel-body">
 
 					<div class="w3-center">
 						<img src="./src/assets/images/sushiavatar.jpg" alt="Alternate Text" class="img-circle" width="120px" height="120px" />
 					</div>
 
 					<hr/>
-
-					<h3><strong>Contact Information</strong></h3>
-					<p id="UAaccemail"></p>
-					<p id="UAphnnum"></p>
-
-					<hr/>
-
-					<h3><strong>Birthday</strong></h3>
-					<p id="UAbday"></p>
-
+					<div style="word-wrap: break-word; text-overflow: visible; overflow: hidden;">
+						<h3><strong>Contact Information</strong></h3>
+						<p id="UAaccemail"></p>
+						<p id="UAphnnum"></p>
+					</div>
 					<hr/>
 
 					<h3><strong>Points</strong></h3>
 					<p id="UAloyPoints"></p>
 				</div>
+
 			</div>
 			<!-- Reservation Table -->
 			<div class="col-lg-9 col-md-9">
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-					<li><a data-toggle="tab" href="#menu1">Settings</a></li>
+					<li><a data-toggle="tab" href="#menu1">Edit Profile</a></li>
 				</ul>
 
 				<div class="tab-content">
-
 					<div class="tabstyle container-fluid table-responsive tab-pane fade in active" id="home">
-						<h2>Reservations</h2>
-						<table class="table table-hover responsive" id="userResvTable">
-							<thead>
-								<tr>
-									<th>UID</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone Number</th>
-									<th>Date</th>
-									<th>Number of Guests</th>
-									<th>Cancel</th>
-								</tr>
-							</thead>
-							<tbody id="tablebody-reservation">
-							</tbody>
-						</table>
-
-
+						<div id="tabSortResv">
+							<h2>Reservations</h2>
+							<table class="table table-hover responsive" id="userResvTable">
+								<thead>
+									<tr>
+										<th class="sort hidden" data-sort="UID">UID</th>
+										<th class="sort" data-sort="FullName">Name</th>
+										<th class="sort" data-sort="Email">Email</th>
+										<th class="sort" data-sort="Phone">Phone Number</th>
+										<th class="sort" data-sort="Date">Date</th>
+										<th class="sort" data-sort="People">Number of Guests</th>
+										<th>Cancel</th>
+									</tr>
+								</thead>
+								<tbody id="tablebody-reservation">
+								</tbody>
+							</table>
+						</div>
 					</div>
 
 					<div id="menu1" class="tab-pane fade">
-						<h3>Settings</h3>
-						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<h3>Edit Profile</h3>
+						<form class="form" id="registrationForm" onsubmit="return editProfile(this)">
+							<div class="form-group">
+
+								<div class="col-xs-6">
+									<label for="first_name"><h4>First name</h4></label>
+									<input type="text" class="form-control" name="first_name" id="edPro_first_name" placeholder="first name" title="enter your first name if any." required>
+								</div>
+							</div>
+							<div class="form-group">
+
+								<div class="col-xs-6">
+									<label for="last_name"><h4>Last name</h4></label>
+									<input type="text" class="form-control" name="last_name" id="edPro_last_name" placeholder="last name(optional)" title="enter your last name if any.">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-6">
+									<label for="mobile"><h4>Mobile</h4></label>
+									<input type="text" class="form-control" name="mobile" id="edPro_mobile" placeholder="enter mobile number" title="enter your mobile number if any." required>
+								</div>
+							</div>
+							<div class="form-group">
+
+								<div class="col-xs-6">
+									<label for="email"><h4>Email</h4></label>
+									<input type="text" class="form-control" name="email" id="edPro_email" placeholder="you@email.com"  title="enter your email." required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-12">
+									<br>
+									<button class="btn btn-lg btn-success" type="submit" id="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+									<button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+								</div>
+							</div>
+						</form>
 					</div>
 
 				</div>
@@ -237,7 +270,7 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 
 		</div>
 	</div>
-
+	<!--Footer-->
 	<footer class="text-center">
 		<a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
 			<span class="glyphicon glyphicon-chevron-up"></span>
@@ -252,10 +285,11 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 	<script src="./src/components/angular-moment-picker.min.js"></script>
 	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.js"></script>
 	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="./src/components/something.js"></script>
-	<script src="./src/components/jq-masked-input.js"></script>
+	<script src="./src/components/jquery.inputmask.bundle.js"></script>
+	<script src="./src/components/phone.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpbOWvfPGFbRedBZf_5ZLPmGhJtItn9kY&callback=myMap"></script>
 	<script src="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.js"></script>
 	<script src="https://unpkg.com/querybase@0.6.0"></script>
@@ -265,22 +299,25 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
-	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
 
 
 
 	<script>
 		// Initialize Firebase  
-		var config = {
+		var configs = {
 			apiKey: "AIzaSyBpjiG-b8_7LtiGbcKgZbG5uCKrwU2U6H4",
 			authDomain: "blueoceanrestaurant-f8f59.firebaseapp.com",
 			databaseURL: "https://blueoceanrestaurant-f8f59.firebaseio.com",
 			storageBucket: "blueoceanrestaurant-f8f59.appspot.com",
 			messagingSenderId: "590954473444"
 		};
-		firebase.initializeApp(config);
-		var database = firebase.database();
-		var user = firebase.auth().currentUser;
+		firebase.initializeApp(configs);
+
+		document.getElementById('ubtnSignOut').onclick = function() {
+			firebase.auth().signOut();
+			window.location = 'index.html';
+		};
 
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
@@ -293,11 +330,19 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 						var c = snapshot.val().email;
 						var d = snapshot.val().loyalty;
 						var e = snapshot.val().phonenumber;
+						//Assigning data to elements
 						document.getElementById('UAuserName').innerHTML = a + " " + b;
-						document.getElementById('UAaccemail').innerHTML = c;
+						document.getElementById('UAaccemail').innerHTML = user.email;
 						document.getElementById('UAphnnum').innerHTML = e;
 						document.getElementById('UAloyPoints').innerHTML = d;
-
+						document.getElementById('edPro_first_name').value = a;
+						document.getElementById('edPro_last_name').value = b;
+						document.getElementById('edPro_email').value = user.email;
+						document.getElementById('edPro_mobile').value = e;
+						document.getElementById('onpage-form-resvfirstname').value = a;
+						document.getElementById('onpage-form-resvlastname').value = b;
+						document.getElementById('onpage-form-resvemail').value = c;
+						document.getElementById('onpage-form-resvphone').value = e;
 					})
 			}
 		});
@@ -306,84 +351,1560 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 		var resvbTabRef = firebase.database().ref("Reservation/user")
 		resvbTabRef.on('child_added', function(snapshot) {
 			var user = firebase.auth().currentUser;
-				var specialKey = [];
-			 specialKey = snapshot.key;
+			var specialKey = snapshot.key;
 			var fullName = snapshot.val().Name;
 			var phnNum = snapshot.val().Phone_Number;
 			var ResvUID = snapshot.val().uid;
 			var ResvDate = snapshot.val().Reservation_Date;
+
+		
+			
 			var NumPeopl = snapshot.val().Number_of_Guests;
 			var ResvEmail = snapshot.val().Email;
+			var btn = "<button id='cancel' class='cancel'>Cancel</button>"
 
-			var ResvInfo = fullName + phnNum + ResvDate + NumPeopl + ResvUID + ResvEmail
-
+			//Only show users reservations if it equals their uid
 			if (user.uid == ResvUID) {
-				var resvData = ('<tr><td ="specialKey">' + specialKey + '</td><td>' + fullName + '</td><td>' + user.email + '</td><td>' + phnNum + '</td><td>' + ResvDate + '</td><td>' + NumPeopl + '</td><td>' + '<button type="button" onclick="deleteUserRow(uid)" class="btn btn-default btn-sm" data-key=' + ResvInfo.key + ' id="cancelResv"><span class="glyphicon glyphicon-remove"></span> Cancel</button>' + '</td></tr>')
-				$("#userResvTable").append(resvData);
-			
-			} else {
-				console.log("error");
-			}
-			
-			/*$('#userResvTable').on('click', 'button[type="button"]', function(snapshot) {
-			$(this).closest('tr').remove();
-			alert(specialKey);
-			var resvbTabRef = firebase.database().ref("Reservation/user/")
-			resvbTabRef.once("value")
-				.then(function(snapshot) {
-					snapshot.forEach(function(childSnapshot) {
-						var key = childSnapshot.key;
-						var childData = childSnapshot.val();
-						var ref = firebase.database().ref("Reservation/user/").child(key)
-						return ref.remove().then(function() {
-							console.log('OK, gone');
-							
-						}).catch(function(e) {
-							console.log('OOPS, problem:' + e.message);
+				var table = document.getElementById("tablebody-reservation");
+				var i = 1;
 
-						})
-
-						childSnapshot.ref.remove();
-						// 								console.log(resTab)
+				createTable();
+				// console.log(document.getElementById("tablebody-reservation").rows[0].cells.item(0).textContent);
+				function createTable() {
+					//Grab snapshot of firebase 	
+					var resvbTabRef = firebase.database().ref("Reservation/user/");
+					resvbTabRef.once('value', function(snapshot) {
+						//Create Cells
+						var row = table.insertRow(0);
+						var cell1 = row.insertCell(0);
+						var cell2 = row.insertCell(1);
+						var cell3 = row.insertCell(2);
+						var cell4 = row.insertCell(3);
+						var cell5 = row.insertCell(4);
+						var cell6 = row.insertCell(5);
+						var cell7 = row.insertCell(6);
+						//Assign values to cells
+						cell1.innerHTML = specialKey;
+						cell1.className = "UID hidden";
+						cell2.innerHTML = fullName;
+						cell2.className = "FullName";
+						cell3.innerHTML = ResvEmail;
+						cell3.className = "Email";
+						cell4.innerHTML = phnNum;
+						cell4.className = "Phone";
+						cell5.innerHTML = ResvDate;
+						cell5.className = "Date";
+						cell6.innerHTML = NumPeopl;
+						cell6.className = "People";
+						cell7.innerHTML = btn;
+						//Grab cancel button and apply event listener
+						var a = document.getElementsByClassName('cancel');
+						for (var i = 0; i < a.length; i++) {
+							a[i].addEventListener('click', function() {
+								//Grab first cell of first row corresponding to the button
+								var b = this.parentNode.parentNode.cells[0].textContent;
+								var c = this.parentNode.parentNode.cells[4].textContent;
+									console.log(c)
+								$("#cancel-modal").modal("show");
+								CancelButton(b,c);
+							})
+						}
 					})
-				})
+				}
 
+				function CancelButton(b , c) {
+					var cBttn = document.getElementById('cbtnResv-modal');
+						var dateObject = moment(c).unix();
+						console.log("UNIX: " + dateObject);
 
-		})*/
+						var curr = moment.unix(dateObject).format("DD MMM YYYY hh:mm a");
+						var dateNohour = moment.unix(dateObject).format("DD MMMM YYYY");
+						//Parse out pieces of date in to sections
+						var hh = moment.unix(dateObject).format("LT");
+						var yyyy = moment.unix(dateObject).format("YYYY");
+						var mmmm = moment.unix(dateObject).format("MMMM");
+						var dddd = moment.unix(dateObject).format("DD");
+						//Convert dateObject to a string 
+						var date2String = moment(dateNohour).toString();
+							//Set Range for first time slot 1050am - 1150am Includes time 11, 1115, 1130, 1145
+							var srtInterval1 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 10,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval1 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 11,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 1150am - 1250pm Includes time 12, 1215, 1230, 1245
+							var srtInterval2 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 11,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval2 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 12,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 1250pm - 150pm Includes time 1, 115, 130, 145
+							var srtInterval3 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 12,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval3 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 13,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 150pm - 250pm		Includes time 2, 215, 230, 245
+							var srtInterval4 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 13,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval4 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 14,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 250pm - 350pm		Includes time 3, 315, 330, 345
+							var srtInterval5 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 14,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval5 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 15,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 350pm - 450pm		Includes time 4, 415, 430, 445		
+							var srtInterval6 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 15,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval6 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 16,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
 
+							//Set Range for first time slot 450pm - 550pm		Includes time 5, 515, 530, 545
+							var srtInterval7 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 16,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval7 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 17,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+
+							//Set Range for first time slot 550pm - 650pm		Includes time 6, 615, 630, 645
+							var srtInterval8 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 17,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval8 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 18,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+
+							//Set Range for first time slot 650pm - 750pm		Includes time 7, 715, 730, 745
+							var srtInterval9 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 18,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval9 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 19,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+
+							//Set Range for first time slot 750pm - 850pm		Includes time 8, 815, 830, 845
+							var srtInterval10 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 19,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+							var endInterval10 = moment().set({
+								'year': yyyy,
+								'month': mmmm,
+								'date': dddd,
+								'hour': 20,
+								'minute': 50
+							}).format("DD MMM YYYY hh:mm a");
+					
+						var countRef = firebase.database().ref("ReservationDates").child(date2String).child("Count");
+						var timeIdRef = firebase.database().ref("ReservationDates").child(date2String);
+
+								
+							//console.log(timeIdRef)
+	
+					cBttn.addEventListener('click', function() {
+						$(this).closest('tr').remove();
+						var resvbTabRef = firebase.database().ref("Reservation/user/")
+						resvbTabRef.once("value")
+							.then(function(snapshot) {
+								snapshot.forEach(function(childSnapshot, uid) {
+									var ref = firebase.database().ref("Reservation/user/").child(b);
+									if (moment(curr).isBetween(srtInterval1, endInterval1)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().FirstHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({FirstHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})														
+													window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})
+									}
+									else if (moment(curr).isBetween(srtInterval2, endInterval2)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().SecondHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({SecondHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})													
+														window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})										
+									}
+									else if (moment(curr).isBetween(srtInterval3, endInterval3)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().ThirdHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({ThirdHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})													
+														window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval4, endInterval4)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().FourthHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({FourthHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})													
+														if(!alert('Your reservation has been cancelled.')){window.location.reload();}
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval5, endInterval5)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().FifthHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({FifthHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})													
+														window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval6, endInterval6)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().SixthHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({SixthHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})														
+														window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval7, endInterval7)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().SeventhHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({SeventhHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})
+                                                        window.location.reload();												
+													})     
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval8, endInterval8)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().EighthHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({EighthHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})
+                                                        window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval9, endInterval9)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().NinethHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({NinethHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})
+                                                        window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})												
+											})												
+									}
+									else if (moment(curr).isBetween(srtInterval10, endInterval10)) {
+										countRef.once('value')
+											.then(function(snapshot) {
+												var a = parseInt(snapshot.val().TenthHour);
+												ref.remove()
+													.then(function() {
+														a++;
+														countRef.update({TenthHour: a});
+														var query = timeIdRef.orderByChild('id').equalTo(b)
+														.on("child_added", function(snapshot){
+														var w = snapshot.key;
+														timeIdRef.child(w).remove();	
+															console.log("removed")
+														})
+                                                        window.location.reload();
+													})
+													.catch(function(e) {
+														console.log('OOPS, problem:' + e.message);
+													})
+											})
+									}
+									
+									
+									
+								})
+							})
+					})
+				}
+			}
 		})
 
+		function editProfile() {
+			//Calling all elements
+			var currentUser = firebase.auth().currentUser;
+			var saveProf = document.getElementById('submit');
+			var edFName = document.getElementById('edPro_first_name').value;
+			var edLName = document.getElementById('edPro_last_name').value;
+			var edEmail = document.getElementById('edPro_email').value;
+			var edPhone = document.getElementById('edPro_mobile').value;
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+			//Reference the database 
+			var db = firebase.database();
+			var auth = firebase.auth();
+
+			if (edFName == "") {
+				alert("Please enter a name.");
+				edFName.focus();
+				return false;
+			}
+			if (edPhone == "") {
+				alert("Please enter a phone number.");
+				edPhone.focus();
+				return false;
+			}
+			if (edEmail == "" || !re.test(edEmail)) {
+				alert("Please enter your email address.");
+				edEmail.focus();
+				return false;
+			} else {
 
 
+				//Update database values with user's new input values
+				db.ref("accounts/" + currentUser.uid).update({
+					firstname: edFName
+				});
+				db.ref("accounts/" + currentUser.uid).update({
+					lastname: edLName
+				});
+				db.ref("accounts/" + currentUser.uid).update({
+					phonenumber: edPhone
+				});
+				currentUser.updateEmail(edEmail).then(function() {
+					// Update successful.
+					db.ref("accounts/" + currentUser.uid).update({
+						email: edEmail
+					});
+                    if(!alert('Success! Your information has been updated!')){window.location.reload();}
+				}, function(error) {
+					var errorCode = error.code;
+					var errorMessage = error.message;
+					// [START_EXCLUDE]
+					if (errorCode == 'auth/invalid-email') {
+						alert(errorMessage);
+					} else if (errorCode == 'auth/email-already-in-use') {
+						alert(errorMessage);
+					}
+					console.log(error);
+				});
+			}
+
+		}
+
+		function handleReservations(e) {
+			var resvForm = document.getElementById('onpage-form-resv')
+			
+				var resvfirstName = document.getElementById('onpage-form-resvfirstname').value;
+				var resvlastName = document.getElementById('onpage-form-resvlastname').value;
+				var resvFullName = (resvfirstName + resvlastName);
+            var spcRequest = document.getElementById('resv-modal-comment').value;
+			var resvEmail = document.getElementById('onpage-form-resvemail').value;
+			var resvPhone = document.getElementById('onpage-form-resvphone').value;
+			var resvDate = document.getElementById('onpage-form-resvdate').value;
+			var resvPtySize = document.getElementById('onpage-form-resvgroup').value;
+            var termBox = document.getElementById("termcheckbox");
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+			var dateObject = moment(resvDate).unix();
+
+			var curr = moment.unix(dateObject).format("DD MMM YYYY hh:mm a");
+			var dateNohour = moment.unix(dateObject).format("DD MMMM YYYY");
+			//Parse out pieces of date in to sections
+			var yyyy = moment.unix(dateObject).format("YYYY");
+			var hh = moment.unix(dateObject).format("LT");
+			var mmmm = moment.unix(dateObject).format("MMMM");
+			var dddd = moment.unix(dateObject).format("DD");
+			//Convert dateObject to a string date
+			var date2String = moment(dateNohour).toString();
+// 			console.log("Chosen Time: " + curr);
+
+
+			//Set Range for first time slot 1050am - 1150am Includes time 11, 1115, 1130, 1145
+			var srtInterval1 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 10,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval1 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 11,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 1150am - 1250pm Includes time 12, 1215, 1230, 1245
+			var srtInterval2 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 11,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval2 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 12,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 1250pm - 150pm Includes time 1, 115, 130, 145
+			var srtInterval3 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 12,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval3 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 13,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 150pm - 250pm		Includes time 2, 215, 230, 245
+			var srtInterval4 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 13,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval4 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 14,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 250pm - 350pm		Includes time 3, 315, 330, 345
+			var srtInterval5 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 14,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval5 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 15,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 350pm - 450pm		Includes time 4, 415, 430, 445		
+			var srtInterval6 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 15,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval6 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 16,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 450pm - 550pm		Includes time 5, 515, 530, 545
+			var srtInterval7 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 16,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval7 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 17,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 550pm - 650pm		Includes time 6, 615, 630, 645
+			var srtInterval8 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 17,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval8 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 18,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 650pm - 750pm		Includes time 7, 715, 730, 745
+			var srtInterval9 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 18,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval9 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 19,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+			//Set Range for first time slot 750pm - 850pm		Includes time 8, 815, 830, 845
+			var srtInterval10 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 19,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+			var endInterval10 = moment().set({
+				'year': yyyy,
+				'month': mmmm,
+				'date': dddd,
+				'hour': 20,
+				'minute': 50
+			}).format("DD MMM YYYY hh:mm a");
+
+
+
+			var countRef = firebase.database().ref("ReservationDates").child(date2String).child("Count");
+			var user = firebase.auth().currentUser;
+			var uResvDataRef = firebase.database().ref('Reservation/user');
+			var reservations = firebase.database().ref('ReservationDates/' + date2String);
+			var rev = firebase.database().ref("ReservationDates/" + date2String);
+			var reservationx = reservations;
+			var userResv = {
+				uid: user.uid,
+				Name: resvFullName,
+				Email: resvEmail,
+				Phone_Number: resvPhone,
+				Reservation_Date: resvDate,
+				Number_of_Guests: resvPtySize
+			};
+			//Time hh:mm
+
+			//Counter variables
+			var rsCounter = {
+				FirstHour: 4,
+				SecondHour: 4,
+				ThirdHour: 4,
+				FourthHour: 4,
+				FifthHour: 4,
+				SixthHour: 4,
+				SeventhHour: 4,
+				EighthHour: 4,
+				NinethHour: 4,
+				TenthHour: 4,
+			}
+
+			if (resvFullName == "") {
+				alert("Please enter a name.");
+				resvFullName.focus();
+				return false;
+			}
+			if (resvPhone == "") {
+				alert("Please enter a phone number.");
+				resvPhone.focus();
+				return false;
+			}
+			if (resvEmail == "" || !re.test(resvEmail)) {
+				alert("Please enter your email address.");
+				resvEmail.focus();
+				return false;
+			}
+            if (termBox.checked == false) {
+                alert('You must agree to the terms first.');
+                termBox.focus();
+                return false;
+            }            
+			if (resvDate == "") {
+				alert("Please pick a date and time.")
+				resvDate.focus();
+				return false;
+			} else {
+
+
+				if (moment(curr).isBetween(srtInterval1, endInterval1)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var a = parseInt(snapshot.val().FirstHour);
+										if (a > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											a--;
+											countRef.update({
+												FirstHour: a
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+														console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												window.location.reload();
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval2, endInterval2)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var b = parseInt(snapshot.val().SecondHour);
+										if (b > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											b--;
+											countRef.update({
+												SecondHour: b
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												window.location.reload();
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval3, endInterval3)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var c = parseInt(snapshot.val().ThirdHour);
+										if (c > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											c--;
+											countRef.update({
+												ThirdHour: c
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval4, endInterval4)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var d = parseInt(snapshot.val().FourthHour);
+										if (d > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											d--;
+											countRef.update({
+												FourthHour: d
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval5, endInterval5)) {
+
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+
+								countRef.once('value')
+									.then(function(snapshot) {
+										var e = parseInt(snapshot.val().FifthHour);
+										if (e > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											e--;
+											countRef.update({
+												FifthHour: e
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval6, endInterval6)) {
+
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var f = parseInt(snapshot.val().SixthHour);
+										if (f > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											f--;
+											countRef.update({
+												SixthHour: f
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval7, endInterval7)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+								countRef.once('value')
+									.then(function(snapshot) {
+										var g = parseInt(snapshot.val().SeventhHour);
+										if (g > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											g--;
+											countRef.update({
+												SeventhHour: g
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval8, endInterval8)) {
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+
+								countRef.once('value')
+									.then(function(snapshot) {
+										var h = parseInt(snapshot.val().EighthHour);
+										if (h > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											h--;
+											countRef.update({
+												EighthHour: h
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval9, endInterval9)) {
+
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+
+								countRef.once('value')
+									.then(function(snapshot) {
+										var i = parseInt(snapshot.val().NinethHour);
+										if (i > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											i--;
+											countRef.update({
+												NinethHour: i
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				} else if (moment(curr).isBetween(srtInterval10, endInterval10)) {
+
+					rev.once("value")
+						.then(function(snapshot) {
+							//Check to see if counter already exists under the selected time and pushes one if one doesn't exist
+							var z = snapshot.child("Count").hasChildren()
+							if (z === false) {
+								//Pushes reservation counter
+								var pushCount = reservationx.child('Count').update(rsCounter);
+								//Push reservation info to database		
+								var uReskey = uResvDataRef.push(userResv).key;
+								var rsDate = {
+										id: uReskey,
+										Time: hh,
+									}
+									//Push Reservation time to store under specific time	
+								var pushDate = reservations.push(rsDate).key;
+								var template_params = {
+									resvFullName: resvFullName,
+									resvEmail: resvEmail,
+									resvPtySize: resvPtySize,
+									resvDate: resvDate,
+									uReskey: pushDate,
+								}
+								emailjs.send("gmail", "reservation_confirmation", template_params)
+									.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+										},
+										function(error) {
+											console.log("FAILED", error);
+										})
+							} else {
+								//Counter already exists for that date 
+
+								countRef.once('value')
+									.then(function(snapshot) {
+										var j = parseInt(snapshot.val().TenthHour);
+										if (j > 0) {
+											//Push reservation info to database		
+											var uReskey = uResvDataRef.push(userResv).key;
+											var rsDate = {
+													id: uReskey,
+													Time: hh,
+												}
+												//Push Reservation time to store under specific time	
+											var pushDate = reservations.push(rsDate).key;
+											j--;
+											countRef.update({
+												TenthHour: j
+											})
+											var template_params = {
+												resvFullName: resvFullName,
+												resvEmail: resvEmail,
+												resvPtySize: resvPtySize,
+												resvDate: resvDate,
+												uReskey: pushDate,
+											}
+											emailjs.send("gmail", "reservation_confirmation", template_params)
+												.then(function(response) {
+													console.log("SUCCESS", response);
+													if(!alert('Your reservation has been made! A confirmation email has been sent to you!')){window.location.reload();}
+													},
+													function(error) {
+														console.log("FAILED", error);
+													})
+										} else {
+											if (!alert('We are very sorry but the time slot has been filled up.')) {
+												
+											}
+										}
+									})
+							}
+						})
+				}
+
+
+				resvForm.reset();
+			}
+
+		}
 	</script>
 
 
 
 	<script>
-		$('#edit').click(function() {
-			$('#exDate').prop("disabled", false);
-		});
-
-		$('#edit').click(function() {
-			$('#exTime').prop("disabled", false);
-		});
-				$(document).ready(function() {
-			$("#nav-btnResv").click(function() {
-				$("#resv-modal").modal();
-			});
-
-		});
+	//Email
+	$("#onpage-form-resvemail").inputmask({ alias: "email",
+                               placeholder: "xxxx"});
+	$("#edPro_email").inputmask({ alias: "email",
+                               placeholder: "xxxx"});				
+	//Phone
+	$("#onpage-form-resvphone").inputmask({ alias: "phone",
+                               placeholder: "xxxx"});	
+	$("#edPro_mobile").inputmask({ alias: "phone",
+                               placeholder: "xxxx"});			
 		
+	//Name
+
+		$('#edPro_first_name').bind('keyup blur', function() {
+			var x = $(this);
+			x.val(x.val().replace(/[^a-zA-Z ]/g, ''));
+		});
+		$('#edPro_last_name').bind('keyup blur', function() {
+			var x = $(this);
+			x.val(x.val().replace(/[^a-zA-Z ]/g, ''));
+		});
+		$('#onpage-form-resvname').bind('keyup blur', function() {
+			var x = $(this);
+			x.val(x.val().replace(/[^a-zA-Z ]/g, ''));
+		});
+
+		var newTableObject = document.getElementById("userResvTable")
+		sorttable.makeSortable(newTableObject);
+        
+        $(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});
 	</script>
 
-
-
 	<script src="newApp.js"></script>
+
 
 </body>
 

@@ -1,4 +1,3 @@
-l
 <html lang="en" ng-app="myApp">
 
 <head>
@@ -17,25 +16,13 @@ l
 	<link rel="stylesheet" href="./src/less/animate.css">
 	<link rel="stylesheet" href="./src/less/w3.css">
 	<link rel="stylesheet" href="./src/less/angular-moment-picker.min.css">
-	<!--
-http://stackoverflow.com/questions/36172986/making-web-form-for-updating-data-in-firebase
-http://stackoverflow.com/questions/38704622/firebase-how-to-use-child-changed-with-tables
-https://vitalets.github.io/x-editable/demo-bs3.html***
-http://bootsnipp.com/snippets/3X6zm
-http://bootsnipp.com/snippets/56ExR
-http://jsfiddle.net/SPddm/300/
-http://stackoverflow.com/questions/9649877/how-to-disable-enable-input-field-on-click-with-jquery
-http://stackoverflow.com/questions/18350923/jquery-enabling-disabling-datepicker
-https://github.com/smalot/bootstrap-datetimepicker/issues/33
-https://www.firebase.com/docs/web/guide/retrieving-data.html#section-queries
-https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
--->
+	<script src="sorttable.js"></script>
 
 
 
 	<style>
-		.table td,
-		th {
+		.table-hover tbody,
+		.table-hover th {
 			text-align: center;
 		}
 		
@@ -44,7 +31,12 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 			border-width: 1px;
 		}
 	</style>
-
+	<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+	<script type="text/javascript">
+		(function() {
+			emailjs.init("user_svZaYyhmMeCSclcHuLGtA");
+		})();
+	</script>
 
 </head>
 
@@ -59,20 +51,24 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span> 
                 </button>
-				<a class="navbar-brand" href="index.html">BLUE OCEAN</a>
+				<a class="navbar-brand" href="index.html">
+					<img src="./src/assets/images/blueoceanlogo.png" class="img-responsive" width="100" height="50" alt="">
+				</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="src/app/home/AdminHelp.html" target="_blank"><i class="glyphicon glyphicon-question-sign pull-left"></i></a>
+					</li>
 					<li class="dropdown"><a class="dropdown-toggle btn-action" id="btnWelcomeUser" data-toggle="dropdown" href="#">Welcome <span id="userNavName"></span> <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="" id="editProfile">EDIT PROFILE</a></li>
 							<li><a href="#signOut" id="ubtnSignOut">SIGN OUT</a></li>
 						</ul>
 					</li>
-						<li class="btn3">
-							<button type="button" class="btn btn-default btn-lg" id="nav-btnResv">Reservation</button>
-						</li>
+					<li class="btn3">
+						<button type="button" class="btn btn-default btn-lg" id="nav-btnResv" data-toggle="modal" data-target="#resv-modal">Reservation</button>
+					</li>
 					<li>
 
 					</li>
@@ -83,87 +79,81 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 			</div>
 		</div>
 	</nav>
-
+	<!--Reservation Modal --->
 	<div class="modal fade" id="resv-modal" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header" style="padding:35px 50px;">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
-					</div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="padding:35px 50px;">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4><span class="glyphicon glyphicon-tent"></span>Reservation</h4>
+				</div>
 
-					<div class="modal-body" style="padding:40px 50px;">
-						<div class="hide" id="userisLoggedIn">
-							<p>Would you like some loyalty points?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Create an account</a></p>
-							<p>Already have an account?<a data-dismiss="modal" data-toggle="modal" href="#signUp-modal" style="color: blue"> Sign In</a></p>
+				<div class="modal-body" style="padding:40px 50px;">
+					<form role="form" class="" id="onpage-form-resv" onsubmit="return handReservations(this)">
+						<div class="form-group col-sm-12">
+							<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
+							<input type="text" class="form-control " id="onpage-form-resvfirstname" placeholder="Enter First Name" required>
+							<input type="text" class="form-control " id="onpage-form-resvlastname" placeholder="Enter Last Name" required>
 						</div>
 
-						<form role="form" class="">
-							<div class="input-group">
-								<label for="usrname"><span class="glyphicon glyphicon-user"></span> Full Name</label>
-								<input type="text" class="form-control" id="resv-modal-firstname" placeholder="First Name*" required>
-								<input type="text" class="form-control" id="resv-modal-lastname" placeholder="Last Name*" required>
-							</div>
-
-							<div class="input-group">
-								<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
-								<input type="email" class="form-control" id="resv-modal-accemail" placeholder="Enter E-mail*" required>
-								<input type="text" class="form-control" id="resv-modal-phnnum" placeholder="Enter Phone Number*" required>
-							</div>
-
-							<div class="input-group">
+						<div class="form-group col-sm-12">
+							<label for="cntct"><span class="glyphicon glyphicon-user"></span> Contact Information</label>
+							<input type="text" class="form-control" id="onpage-form-resvemail" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" oninvalid="setCustomValidity('email@email.com')" onchange="try{setCustomValidity('')}catch(e){}" placeholder="Enter E-mail*" required>
+							<input type="text" class="form-control" id="onpage-form-resvphone" placeholder="Enter Phone Number*" required>
+						</div>
+                            <div class="form-group col-sm-12">
 								<label for="spial"><span class="glyphicon glyphicon-pencil"></span> Special Request</label>
-								<textarea class="form-control" rows="5" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
+								<textarea class="form-control" rows="5" maxlength="100" id="resv-modal-comment" placeholder="Add a special request(optional)"></textarea>
+							</div>
+						<div class="form-group col-sm-12">
+							<div class="col-sm-12">
+								<label for="timNdate"><span class="glyphicon glyphicon-calendar "></span> Reservation Date</label>
 							</div>
 
-							<div class="form-group">
-								<label for="timNdate"><span class="glyphicon glyphicon-calendar"></span> Reservation Date</label>
-
-								<div id="resv-mod-input" class="resv-modal-input">
-									<div class="form-group col-sm-4">
-										<input class="form-control" id="resv-modal-date" ng-model="ctrl.datepicker" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.date" format="LL" min-view="year" start-view="month" min-date="ctrl.minDateMoment" max-date="ctrl.maxDateMoment"
-											autoclose="true" locale="en">
-									</div>
-
-									<div class="form-group col-sm-4">
-										<input class="form-control" id="resv-modal-time" format="LT" min-date="ctrl.minDateMoment" moment-picker="ctrl.time" placeholder="Select a time" ng-model="ctrl.timepicker" ng-model-options="{ updateOn: 'blur' }">
-									</div>
-
-									<div class="form-group col-sm-4">
-										<select name="people attending" style="padding:5px" class="ptysize col-sm-4" id="resv-modal-ptysize">
-                  <option value="1person">1 person</option>
-                  <option value="2person">2 people</option>
-                  <option value="3person">3 people</option>
-                  <option value="4person">4 people</option>
-                  <option value="5person">5 people</option>
-                </select>
-									</div>
-								</div>
+							<div class="form-group col-sm-6">
+								<input class="form-control" ng-model="ctrl.input" id="onpage-form-resvdate" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.input" format="MMMM DD, YYYY LT" min-view="year" start-view="month" min-date="ctrl.minDateMoment"
+									max-date="ctrl.maxDateMoment" autoclose="true" locale="en" required>
 							</div>
 
-
-
-							<!--<div class="checkbox">-->
-							<!--  <label><input type="checkbox" value="" checked>Yes, I want to receive email messages.</label>-->
-							<!--</div>-->
-							<input type="submit" class="btn btn-success btn-block" id="btnResv-modal" data-dismiss="modal" value="Create reservation">
-						</form>
-					</div>
-
-
+							<div class="form-group col-sm-6">
+								<select name="people attending" class="ptysizes" style="width: 100%; height: 35" id="onpage-form-resvgroup">
+                  		<option value="1 person">1 person</option>
+                  		<option value="2 people">2 people</option>
+                  		<option value="3 people">3 people</option>
+                  		<option value="4 people">4 people</option>
+                  		<option value="5 people">5 people</option>
+                  		<option value="1 person">6 person</option>
+                  		<option value="2 people">7 people</option>
+                  		<option value="3 people">8 people</option>
+                  		<option value="4 people">9 people</option>
+                  		<option value="5 people">10 people</option>
+                  		<option value="1 person">11 person</option>
+                  		<option value="2 people">12 people</option>
+                  		<option value="3 people">13 people</option>
+                  		<option value="4 people">14 people</option>
+                  		<option value="5 people">15 people</option>
+                  		<option value="1 person">16 person</option>
+                  		<option value="2 people">17 people</option>
+                  		<option value="3 people">18 people</option>
+                  		<option value="4 people">19 people</option>
+                  		<option value="5 people">20 people</option>
+                  		<option value="1 person">21 person</option>
+                  		<option value="2 people">22 people</option>
+                  		<option value="3 people">23 people</option>
+                  		<option value="4 people">24 people</option>
+                  		<option value="5 people">25 people</option>
+                		</select>
+							</div>
+						</div>
+						<input type="submit" class="btn btn-success btn-block" id="onpage-form-btnResv" data-backdrop="static" value="Create reservation">
+					</form>
 				</div>
 			</div>
 		</div>
-	
-	
-	
-	
-	
-	
+	</div>
+	<!-- Side panel -->
 	<div class="container-fluid w3-padding-64 w3-sand" id="reservation">
-
-		<div class="col-lg-12 col-md-12 ">
-
+		<div class="col-lg-12 col-md-12 col-sm-12">
 			<div class="col-md-2 col-lg-2 w3-light-blue hidden-sm hidden-xs">
 				<div class="panel-heading w3-center">
 					<h3>
@@ -173,22 +163,17 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 					</h3>
 				</div>
 				<div class="left-panel">
-
 					<div class="w3-center">
 						<img src="./src/assets/images/sushiavatar.jpg" alt="Alternate Text" class="img-circle" width="120px" height="120px" />
 					</div>
 
 					<hr/>
 
-					<h3><strong>Contact Information</strong></h3>
-					<p id="UAaccemail"></p>
-					<p id="UAphnnum"></p>
-
-					<hr/>
-
-					<h3><strong>Birthday</strong></h3>
-					<p id="UAbday"></p>
-
+					<div style="word-wrap: break-word; text-overflow: visible; overflow: hidden;">
+						<h3><strong>Contact Information</strong></h3>
+						<p id="UAaccemail"></p>
+						<p id="UAphnnum"></p>
+					</div>
 					<hr/>
 
 					<h3><strong>Points</strong></h3>
@@ -196,48 +181,176 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 				</div>
 			</div>
 			<!-- Reservation Table -->
-			<div class="col-lg-9 col-md-9">
+			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+				<h2>Active Users</h2>
 				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-					<li><a data-toggle="tab" href="#menu1">Settings</a></li>
+					<li class="active"><a data-toggle="tab" href="#activeuser">Users</a></li>
 				</ul>
 
 				<div class="tab-content">
-
-					<div class="tabstyle container-fluid table-responsive tab-pane fade in active" id="home">
-						<h2>Reservations</h2>
-						<table class="table table-hover responsive" id="userResvTable">
-							<thead>
-								<tr>
-									<th>UID</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone Number</th>
-									<th>Date</th>
-									<th>Number of Guests</th>
-									<th>Cancel</th>
-								</tr>
-							</thead>
-							<tbody id="tablebody-reservation">
-							</tbody>
-						</table>
-
-
+					<div class="tabstyle container-fluid tab-pane fade in active" id="activeuser">
+						<div id="tabSortResv" class="table-responsive">
+							<table class="table table-hover " id="userLoyalTable">
+								<thead>
+									<tr>
+										<th class="sort" data-sort="UID">User ID</th>
+										<th class="sort" data-sort="Email">Email</th>
+										<th class="sort" data-sort="Phone">Phone Number</th>
+										<th class="sort" data-sort="Loyalty">Loyalty</th>
+										<th>Give Points</th>
+									</tr>
+								</thead>
+								<tbody class="list" id="tablebody-loyalty">
+								</tbody>
+							</table>
+						</div>
 					</div>
-
-					<div id="menu1" class="tab-pane fade">
-						<h3>Settings</h3>
-						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-					</div>
-
 				</div>
 
 			</div>
 			<!-- End of Table -->
+			<div class="col-md-2 col-lg-2 col-sm-2 col-xs-2f">
 
+			</div>
+
+			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+				<h2 class="heading-styles">Reservations</h2>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#user">Users</a></li>
+					<li><a data-toggle="tab" href="#guest">Guests</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div class="tabstyle container-fluid tab-pane fade in active" id="user">
+						<div id="tabSortResv" class="table-responsive">
+							<table class="table table-hover" id="userResvTable">
+								<thead class="">
+									<tr>
+										<th class="sort hidden" data-sort="UID"><span class="text">Reservation ID</span></th>
+										<th class="sort" data-sort="FullName"><span class="text">Name</span></th>
+										<th class="sort" data-sort="Email"><span class="text">Email</span></th>
+										<th class="sort" data-sort="Phone"><span class="text">Phone Number</span></th>
+										<th class="sort" data-sort="Date"><span class="text">Date</span></th>
+										<th class="sort" data-sort="People"><span class="text">Number of Guests</span></th>
+										<th><span class="text">Edit</span></th>
+										<th><span class="text">Cancel</span></th>
+									</tr>
+								</thead>
+								<tbody class="list" id="tablebody-reservation">
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="tabstyle container-fluid tab-pane fade in" id="guest">
+						<div id="test-list" class="table-responsive">
+							<table class="table table-hover" id="guestResvTable">
+								<thead>
+									<tr>
+										<th class="sort hidden" data-sort="UID">Reservation ID</th>
+										<th class="sort" data-sort="FullName">Name</th>
+										<th class="sort" data-sort="Email">Email</th>
+										<th class="sort" data-sort="Phone">Phone Number</th>
+										<th class="sort" data-sort="Date">Date</th>
+										<th class="sort" data-sort="People">Number of Guests</th>
+										<th>Edit</th>
+										<th>Cancel</th>
+									</tr>
+								</thead>
+								<tbody class="list" id="guest-tablebody-reservation">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+		</div>
+
+	</div>
+	<!--Edit Reservation Modal -->
+	<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="padding:35px 50px;">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4><span class="glyphicon glyphicon-tent"></span>Edit Reservation</h4>
+				</div>
+
+				<div class="modal-body" style="padding:40px 50px;">
+					<form role="form" class="">
+
+						<div class="form-group">
+							<label for="timNdate"><span class="glyphicon glyphicon-calendar"></span> Reservation Date</label>
+
+							<div id="resv-modal-input" class="resv-modal-input">
+								<div class="form-group col-sm-6">
+									<input class="form-control" id="edit-modal-date" ng-model="ctrl.input" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date" moment-picker="ctrl.input" format="MMMM DD, YYYY LT" min-view="year" start-view="month" min-date="ctrl.minDateMoment"
+										max-date="ctrl.maxDateMoment" autoclose="true" locale="en" required>
+								</div>
+
+								<div class="form-group col-sm-6">
+									<select name="people attending" class="ptysize col-sm-6" style="width: 90%; height: 35" id="edit-modal-ptysize">
+                                        <option value="1 person">1 person</option>
+                                        <option value="2 people">2 people</option>
+                                        <option value="3 people">3 people</option>
+                                        <option value="4 people">4 people</option>
+                                        <option value="5 people">5 people</option>
+                                        <option value="6 people">6 person</option>
+                                        <option value="7 people">7 people</option>
+                                        <option value="8 people">8 people</option>
+                                        <option value="9 people">9 people</option>
+                                        <option value="10 people">10 people</option>
+                                        <option value="11 people">11 person</option>
+                                        <option value="12 people">12 people</option>
+                                        <option value="13 people">13 people</option>
+                                        <option value="14 people">14 people</option>
+                                        <option value="15 people">15 people</option>
+                                        <option value="16 people">16 person</option>
+                                        <option value="17 people">17 people</option>
+                                        <option value="18 people">18 people</option>
+                                        <option value="19 people">19 people</option>
+                                        <option value="20 people">20 people</option>
+                                        <option value="21 people">21 person</option>
+                                        <option value="22 people">22 people</option>
+                                        <option value="23 people">23 people</option>
+                                        <option value="24 people">24 people</option>
+                                        <option value="25 people">25 people</option>
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<input type="submit" class="btn btn-success btn-block" id="ebtnResv-modal" data-backdrop="static" value="Submit">
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
-
+	<!--Cancel Reservation Modal -->
+	<div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="padding:35px 50px;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Are you sure you want to cancel your reservation?</h4>
+				</div>
+				<div class="modal-body">
+					<p>We'll miss you and hope you come back</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary" data-backdrop="static" id="cbtnResv-modal">Yes</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!--Footer -->
 	<footer class="text-center">
 		<a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
 			<span class="glyphicon glyphicon-chevron-up"></span>
@@ -252,10 +365,11 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 	<script src="./src/components/angular-moment-picker.min.js"></script>
 	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.js"></script>
 	<script src="./src/components/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="./src/components/something.js"></script>
-	<script src="./src/components/jq-masked-input.js"></script>
+	<script src="./src/components/jquery.inputmask.bundle.js"></script>
+	<script src="./src/components/phone.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpbOWvfPGFbRedBZf_5ZLPmGhJtItn9kY&callback=myMap"></script>
 	<script src="https://cdn.firebase.com/libs/firebaseui/1.0.1/firebaseui.js"></script>
 	<script src="https://unpkg.com/querybase@0.6.0"></script>
@@ -265,10 +379,8 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-database.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase-messaging.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
-	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
-
-
+	<!--Handles the User's Reservation Table  -->
 	<script>
 		// Initialize Firebase  
 		var config = {
@@ -281,6 +393,10 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 		firebase.initializeApp(config);
 		var database = firebase.database();
 		var user = firebase.auth().currentUser;
+		document.getElementById('ubtnSignOut').onclick = function() {
+			firebase.auth().signOut();
+			window.location = 'index.html';
+		};
 
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
@@ -293,90 +409,418 @@ https://github.com/firebase/quickstart-js/blob/master/database/scripts/main.js
 						var c = snapshot.val().email;
 						var d = snapshot.val().loyalty;
 						var e = snapshot.val().phonenumber;
+						var d = snapshot.val().loyalty;
+
 						document.getElementById('UAuserName').innerHTML = a + " " + b;
 						document.getElementById('UAaccemail').innerHTML = c;
 						document.getElementById('UAphnnum').innerHTML = e;
 						document.getElementById('UAloyPoints').innerHTML = d;
-
 					})
 			}
 		});
 
-
 		var resvbTabRef = firebase.database().ref("Reservation/user")
 		resvbTabRef.on('child_added', function(snapshot) {
 			var user = firebase.auth().currentUser;
-				var specialKey = [];
-			 specialKey = snapshot.key;
+			var specialKey = snapshot.key;
 			var fullName = snapshot.val().Name;
 			var phnNum = snapshot.val().Phone_Number;
 			var ResvUID = snapshot.val().uid;
 			var ResvDate = snapshot.val().Reservation_Date;
 			var NumPeopl = snapshot.val().Number_of_Guests;
 			var ResvEmail = snapshot.val().Email;
+			var ebtn = "<button id='edit' class='edit'>Edit</button>"
+			var cbtn = "<button id='cancel' class='cancel'>Cancel</button>"
 
 			var ResvInfo = fullName + phnNum + ResvDate + NumPeopl + ResvUID + ResvEmail
+				//Only show users reservations if it equals their uid
 
-			if (user.uid == ResvUID) {
-				var resvData = ('<tr><td ="specialKey">' + specialKey + '</td><td>' + fullName + '</td><td>' + user.email + '</td><td>' + phnNum + '</td><td>' + ResvDate + '</td><td>' + NumPeopl + '</td><td>' + '<button type="button" class="btn btn-default btn-sm" data-key=' + ResvInfo.key + ' id="cancelResv"><span class="glyphicon glyphicon-remove"></span> Cancel</button>' + '</td></tr>')
-				$("#userResvTable").append(resvData);
-			
-			} else {
-				console.log("error");
-			}
-			
-			$('#userResvTable').on('click', 'button[type="button"]', function(snapshot) {
-			$(this).closest('tr').remove();
-			alert(specialKey);
-			var resvbTabRef = firebase.database().ref("Reservation/user/")
-			resvbTabRef.once("value")
-				.then(function(snapshot) {
-					snapshot.forEach(function(childSnapshot) {
-						var key = childSnapshot.key;
-						var childData = childSnapshot.val();
-						var ref = firebase.database().ref("Reservation/user/").child(key)
-						return ref.remove().then(function() {
-							console.log('OK, gone');
-							
-						}).catch(function(e) {
-							console.log('OOPS, problem:' + e.message);
+			var table = document.getElementById("tablebody-reservation");
+			var i = 1;
+			//Grab snapshot of firebase 	
+			createTable();
+			// console.log(document.getElementById("tablebody-reservation").rows[0].cells.item(0).textContent);
+			function createTable() {
+				var resvbTabRef = firebase.database().ref("Reservation/user/");
+				resvbTabRef.once('value', function(snapshot) {
 
+					var row = table.insertRow(0);
+					var cell1 = row.insertCell(0); //UID
+					var cell2 = row.insertCell(1); //FullName
+					var cell3 = row.insertCell(2); //Email
+					var cell4 = row.insertCell(3); //Phone
+					var cell5 = row.insertCell(4); //Date
+					var cell6 = row.insertCell(5); //People
+					var cell7 = row.insertCell(6); //Edit Button
+					var cell8 = row.insertCell(7); //Cancel Button
+
+
+					cell1.innerHTML = specialKey;
+					cell1.className = "UID hidden";
+					cell2.innerHTML = fullName;
+					cell2.className = "FullName";
+					cell3.innerHTML = ResvEmail;
+					cell3.className = "Email";
+					cell4.innerHTML = phnNum;
+					cell4.className = "Phone";
+					cell5.innerHTML = ResvDate;
+					cell5.className = "Date";
+					cell6.innerHTML = NumPeopl;
+					cell6.className = "People";
+					cell7.innerHTML = ebtn;
+					cell8.innerHTML = cbtn;
+					//Grab cancel button and apply event listener
+					var a = document.getElementsByClassName('cancel');
+					var e = document.getElementsByClassName('edit');
+					for (var i = 0; i < a.length; i++) {
+						a[i].addEventListener('click', function() {
+							var b = this.parentNode.parentNode.cells[0].textContent;
+							$("#cancel-modal").modal("show");
+							CancelButton(b);
 						})
+						e[i].addEventListener('click', function() {
+							var f = this.parentNode.parentNode.cells[0].textContent;
+							var c = this.parentNode.parentNode.cells[4].textContent;
+							var d = this.parentNode.parentNode.cells[5].textContent;
+							//Shows modal when button is clicked
+							$("#edit-modal").modal("show");
+							//Pre populate elements and checking to see correct value of cells4 and cells5
+							document.getElementById("edit-modal-date").value = c;
+//							console.log(c + " " + d);
+							EditButton(f, c, d)
+						})
+					}
+				})
+			}
 
-						childSnapshot.ref.remove();
-						// 								console.log(resTab)
+			function EditButton(f, c, d) {
+				var eBtn = document.getElementById("ebtnResv-modal");
+				var dbase = firebase.database();
+				eBtn.addEventListener('click', function() {
+					var eDate = document.getElementById("edit-modal-date").value;
+					var ePepl = document.getElementById("edit-modal-ptysize").value;
+					dbase.ref("Reservation/user/").child(f).update({
+						Reservation_Date: eDate
 					})
+					dbase.ref("Reservation/user").child(f).update({
+						Number_of_Guests: ePepl
+					})
+					location.reload();
 				})
 
+			}
+
+
+			function CancelButton(b) {
+				var cBttn = document.getElementById('cbtnResv-modal');
+
+				cBttn.addEventListener('click', function() {
+					$(this).closest('tr').remove();
+					var resvbTabRef = firebase.database().ref("Reservation/user/")
+					resvbTabRef.once("value")
+						.then(function(snapshot) {
+							snapshot.forEach(function(childSnapshot, uid) {
+								var ref = firebase.database().ref("Reservation/user/").child(b);
+								ref.remove().then(function() {
+
+//									console.log('OK, gone');
+                                    location.reload();
+								}).catch(function(e) {
+									console.log('OOPS, problem:' + e.message);
+								})
+							})
+						})
+				})
+			}
 
 		})
 
+		function handReservations(e) {
+			var resvForm = document.getElementById('onpage-form-resv')
+				var resvfirstName = document.getElementById('onpage-form-resvfirstname').value;
+				var resvlastName = document.getElementById('onpage-form-resvlastname').value;
+					var resvFullName = (resvfirstName + resvlastName);
+            var spcRequest = document.getElementById('resv-modal-comment').value;
+			var resvEmail = document.getElementById('onpage-form-resvemail').value;
+			var resvPhone = document.getElementById('onpage-form-resvphone').value;
+			var resvDate = document.getElementById('onpage-form-resvdate').value;
+			var resvPtySize = document.getElementById('onpage-form-resvgroup').value;
+
+			//user is signed in
+			var user = firebase.auth().currentUser;
+			var uResvDataRef = firebase.database().ref('Reservation/user');
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+			if (resvFullName == "") {
+				alert("Please enter a name.");
+				resvFullName.focus();
+				return false;
+			}
+			if (resvPhone == "") {
+				alert("Please enter a phone number.");
+				resvPhone.focus();
+				return false;
+			}
+			if (resvEmail == "" || !re.test(resvEmail)) {
+				alert("Please enter your email address.");
+				resvEmail.focus();
+				return false;
+			}
+			if (resvDate == "") {
+				alert("Please pick a date and time.")
+				resvDate.focus();
+				return false;
+			} else {
+
+				var userResv = {
+					uid: user.uid,
+					Name: resvFullName,
+					Email: resvEmail,
+					Phone_Number: resvPhone,
+					Reservation_Date: resvDate,
+					Number_of_Guests: resvPtySize
+				};
+				var uReskey = uResvDataRef.push(userResv).key;
+				var template_params = {
+					resvFullName: resvFullName,
+					resvEmail: resvEmail,
+					resvPtySize: resvPtySize,
+					resvDate: resvDate,
+					uReskey: uReskey,
+				}
+
+
+
+				resvForm.reset();
+				alert('Your reservation has been made!');
+
+			}
+			e.preventDefault();
+		}
+	</script>
+	<!--Handles the Guest's Reservation Table  -->
+	<script>
+		var resvTabRef = firebase.database().ref("Reservation/guest")
+		resvTabRef.on('child_added', function(snapshot) {
+			var user = firebase.auth().currentUser;
+			var specialKey = snapshot.key;
+			var fullName = snapshot.val().Name;
+			var phnNum = snapshot.val().Phone_Number;
+			var ResvUID = snapshot.val().uid;
+			var ResvDate = snapshot.val().Reservation_Date;
+			var NumPeopl = snapshot.val().Number_of_Guests;
+			var ResvEmail = snapshot.val().Email;
+			var eebtn = "<button id='gedit' class='gedit'>Edit</button>"
+			var ccbtn = "<button id='gcancel' class='gcancel'>Cancel</button>"
+			var ResvInfo = fullName + phnNum + ResvDate + NumPeopl + ResvUID + ResvEmail
+				//Only show users reservations if it equals their uid
+
+			var tablee = document.getElementById("guest-tablebody-reservation");
+			var i = 1;
+			//Grab snapshot of firebase 	
+			createTable();
+			// console.log(document.getElementById("tablebody-reservation").rows[0].cells.item(0).textContent);
+			function createTable() {
+				var resvTabRef = firebase.database().ref("Reservation/guest/");
+				resvTabRef.once('value', function(snapshot) {
+
+					var row = tablee.insertRow(0);
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+					var cell4 = row.insertCell(3);
+					var cell5 = row.insertCell(4);
+					var cell6 = row.insertCell(5);
+					var cell7 = row.insertCell(6);
+					var cell8 = row.insertCell(7);
+
+					cell1.innerHTML = specialKey;
+					cell1.className = "UID hidden";
+					cell2.innerHTML = fullName;
+					cell2.className = "FullName";
+					cell3.innerHTML = ResvEmail;
+					cell3.className = "Email";
+					cell4.innerHTML = phnNum;
+					cell4.className = "Phone";
+					cell5.innerHTML = ResvDate;
+					cell5.className = "Date";
+					cell6.innerHTML = NumPeopl;
+					cell6.className = "People";
+					cell7.innerHTML = eebtn;
+					cell8.innerHTML = ccbtn;
+
+					var aa = document.getElementsByClassName('gcancel');
+					var ee = document.getElementsByClassName('gedit');
+					for (var i = 0; i < aa.length; i++) {
+						aa[i].addEventListener('click', function() {
+							var b = this.parentNode.parentNode.cells[0].textContent;
+//                            console.log("hi i'm b" +b)
+							$("#cancel-modal").modal("show");
+							CancelButton(b);
+						})
+						ee[i].addEventListener('click', function() {
+							var m = this.parentNode.parentNode.cells[0].textContent;
+							var l = this.parentNode.parentNode.cells[4].textContent;
+							var n = this.parentNode.parentNode.cells[5].textContent;
+							//Shows modal when button is clicked
+							$("#edit-modal").modal("show");
+							//Pre populate elements and checking to see correct value of cells4 and cells5
+							document.getElementById("edit-modal-date").value = l;
+//							console.log(m);
+//                            console.log(l);
+//                            console.log(n);
+							EditButton(m, l, n)
+						})
+					}
+				})
+			}
+
+			function EditButton(m, l, n) {
+				var eeBtn = document.getElementById("ebtnResv-modal");
+				
+				eeBtn.addEventListener('click', function() {
+                    var daabase = firebase.database();
+					var eeDate = document.getElementById("edit-modal-date").value;
+					var eePepl = document.getElementById("edit-modal-ptysize").value;
+					daabase.ref("Reservation/guest").child(m).update({
+						Reservation_Date: eeDate
+					})
+					daabase.ref("Reservation/guest").child(m).update({
+						Number_of_Guests: eePepl
+					})
+					location.reload();
+				})
+
+			}
+
+
+			function CancelButton(b) {
+				var ccBttn = document.getElementById('cbtnResv-modal');
+				ccBttn.addEventListener('click', function() {
+
+					$(this).closest('tr').remove();
+					var resvTabRef = firebase.database().ref("Reservation/guest/")
+					resvTabRef.once("value")
+						.then(function(snapshot) {
+							snapshot.forEach(function(childSnapshot, uid) {
+								// 							var key = childSnapshot.key;
+								// 							var childData = childSnapshot.val();
+								var reef = firebase.database().ref("Reservation/guest/").child(b);
+								// 							console.log(reef)
+								reef.remove().then(function() {
+//									console.log('OK, gone');
+                                    location.reload();
+								}).catch(function(e) {
+									console.log('OOPS, problem:' + e.message);
+								})
+							})
+						})
+
+				})
+			}
+		})
+	</script>
+	<!--Handles the Active User's Table  -->
+	<script>
+		var userTabRef = firebase.database().ref("accounts/")
+		userTabRef.on('child_added', function(snapshot) {
+			var userId = snapshot.key
+			var userEmail = snapshot.val().email;
+			var userPhnNum = snapshot.val().phonenumber;
+			var userLoyalty = snapshot.val().loyalty;
+			var loyBtn = "<button id='add' class='add'>Give Points</button>"
+
+			var uTable = document.getElementById("tablebody-loyalty")
+			var i = 1;
+
+			createTable();
+
+			function createTable() {
+				//Grab Snapshot of Firebase
+				var userTabRef = firebase.database().ref("accounts/");
+				userTabRef.once('value', function(snapshot) {
+					//Create Cells
+					var row = uTable.insertRow(0);
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+					var cell4 = row.insertCell(3);
+					var cell5 = row.insertCell(4);
+					var cell6 = row.insertCell(5);
+					//Assign value to cells
+					cell1.innerHTML = userId;
+					cell1.className = "UID";
+					cell2.innerHTML = userEmail;
+					cell2.className = "Email";
+					cell3.innerHTML = userPhnNum;
+					cell3.className = "Phone";
+					cell4.innerHTML = userLoyalty;
+					cell4.className = "Loyalty";
+					cell5.innerHTML = loyBtn;
+
+					var z = document.getElementsByClassName('add');
+					for (var i = 0; i < z.length; i++) {
+						z[i].addEventListener('click', function() {
+							//Grab first cell of first row corresponding to the button
+							var y = this.parentNode.parentNode.cells[0].textContent;
+							var x = this.parentNode.parentNode.cells[3].textContent;
+							addButton(y, x);
+						})
+					}
+				})
+			}
+
+			function addButton(y, x) {
+
+				var dbase = firebase.database();
+				var pBase = parseInt(100);
+				var curLoy = parseInt(x);
+				var total = parseInt(pBase + curLoy);
+
+				console.log(pBase)
+				console.log(curLoy)
+				console.log(total)
+
+
+				console.log(total)
+				dbase.ref("accounts/").child(y).update({
+					loyalty: total
+				})
+
+				location.reload();
+			}
+
 
 		})
-
-
-
 	</script>
 
 
 
 	<script>
-		$('#edit').click(function() {
-			$('#exDate').prop("disabled", false);
-		});
-
-		$('#edit').click(function() {
-			$('#exTime').prop("disabled", false);
-		});
-				$(document).ready(function() {
-			$("#nav-btnResv").click(function() {
-				$("#resv-modal").modal();
-			});
-
-		});
+		//Email
+	$("#onpage-form-resvemail").inputmask({ alias: "email",
+                               placeholder: "xxxx"});		
 		
-	</script>
+		//Phone
+	$("#onpage-form-resvphone").inputmask({ alias: "phone",
+                               placeholder: "xxxx"});			
+		
+		//Name
+		$('#onpage-form-resvname').bind('keyup blur', function() {
+			var x = $(this);
+			x.val(x.val().replace(/[^a-zA-Z ]/g, ''));
+		});
 
+		var aTableObject = document.getElementById("userLoyalTable")
+		sorttable.makeSortable(aTableObject);
+
+		var newTableObject = document.getElementById("userResvTable")
+		sorttable.makeSortable(newTableObject);
+
+		var secTableObject = document.getElementById("guestResvTable")
+		sorttable.makeSortable(secTableObject);
+	</script>
 
 
 	<script src="newApp.js"></script>
